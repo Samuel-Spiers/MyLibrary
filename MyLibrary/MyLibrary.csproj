@@ -60,16 +60,16 @@
     <Compile Include="debugForm.Designer.cs">
       <DependentUpon>debugForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="libraryDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>libraryDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyLibrary1DataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyLibrary1DataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,16 +93,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="libraryDataSet.xsc">
-      <DependentUpon>libraryDataSet.xsd</DependentUpon>
+    <None Include="MyLibrary1DataSet.xsc">
+      <DependentUpon>MyLibrary1DataSet.xsd</DependentUpon>
     </None>
-    <None Include="libraryDataSet.xsd">
+    <None Include="MyLibrary1DataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>libraryDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>MyLibrary1DataSet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="libraryDataSet.xss">
-      <DependentUpon>libraryDataSet.xsd</DependentUpon>
+    <None Include="MyLibrary1DataSet.xss">
+      <DependentUpon>MyLibrary1DataSet.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

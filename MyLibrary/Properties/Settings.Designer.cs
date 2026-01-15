@@ -33,5 +33,25 @@ namespace MyLibrary.Properties {
                 return ((string)(this["libraryConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\\MyLibrary.accdb")]
+        public string MyLibraryConnectionString {
+            get {
+                return ((string)(this["MyLibraryConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\\MyLibrary1.accdb")]
+        public string MyLibrary1ConnectionString {
+            get {
+                return ((string)(this["MyLibrary1ConnectionString"]));
+            }
+        }
     }
 }

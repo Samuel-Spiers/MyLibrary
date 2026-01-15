@@ -39,7 +39,7 @@ namespace MyLibrary
             // Attempt to establish the database connection
             try {
                 Log("Attempting to establish database connection...");
-                Log(@"Connection string: @""Data Source=.\SQLEXPRESS;Initial Catalog=library;Integrated Security=True""");
+                Log(@"Connection string: ""Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\""MyLibrary1.accdb\""""");
                 connection = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=library;Integrated Security=True");
                 connection.Open();
                 Log("Connection successful");
@@ -99,15 +99,20 @@ namespace MyLibrary
             string search = searchTextBox.Text;
             resultsListBox.Items.Clear();
 
-            // Get the list of books that match the search, and their respective authors
+            // Get the list of books that match the search
             List<Book> bookList = QueryDatabaseBooks(search);
-            List<Author> authorList = QueryDatabaseAuthors(bookList);
-
-            // Display the results in the resultsListBox
-            int index = 0;
-            foreach (Book book in bookList) {
-                resultsListBox.Items.Add($"{index+1}. {book.Title} By {authorList[index].FirstName} {authorList[index].LastName}");
-                index++;
+            log.Add($"{bookList.Count} results found");
+            if (bookList.Count > 0) {
+                // If any books are found, find their respective authors
+                List<Author> authorList = QueryDatabaseAuthors(bookList);
+                // Display the results in the resultsListBox
+                int index = 0;
+                foreach (Book book in bookList) {
+                    resultsListBox.Items.Add($"{index+1}. {book.Title} By {authorList[index].FirstName} {authorList[index].LastName}");
+                    index++;
+                }
+            } else {
+                resultsListBox.Items.Add("No results");
             }
         }
 
@@ -127,7 +132,7 @@ namespace MyLibrary
                                                     "FROM books " +
                                                    $"WHERE title LIKE @Search", connection);
                 command.Parameters.AddWithValue("@Search", formattedSearch);
-                log.Add($"Sending query to database: {command.CommandText}");
+                log.Add($"Sending book query to database: {command.CommandText}");
                 reader = command.ExecuteReader();
                 // Read the query results into the book list
                 while (reader.Read()) {
@@ -165,7 +170,7 @@ namespace MyLibrary
                 SqlCommand command = new SqlCommand("SELECT * " +
                                                     "FROM authors a " +
                                                    $"WHERE a.author_id IN ({authorIds})", connection);
-                log.Add($"Sending query to database: {command.CommandText}");
+                log.Add($"Sending author query to database: {command.CommandText}");
 
                 // Query the database to find the authors and read the output into an array
                 reader = command.ExecuteReader();
