@@ -1,0 +1,13 @@
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\bin\Debug\MyLibrary.exe.config
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\bin\Debug\MyLibrary.exe
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\bin\Debug\MyLibrary.pdb
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.csproj.AssemblyReference.cache
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.mainForm.resources
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.Properties.Resources.resources
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.csproj.GenerateResource.cache
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.csproj.CoreCompileInputs.cache
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.exe
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.pdb
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.exe.config
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.addBookForm.resources
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.debugForm.resources
