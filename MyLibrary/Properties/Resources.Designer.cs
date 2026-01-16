@@ -69,5 +69,25 @@ namespace MyLibrary.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MyLibraryIconSmall {
+            get {
+                object obj = ResourceManager.GetObject("MyLibraryIconSmall", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MyLibraryLogo {
+            get {
+                object obj = ResourceManager.GetObject("MyLibraryLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
