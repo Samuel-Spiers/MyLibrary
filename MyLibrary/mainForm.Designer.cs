@@ -254,7 +254,8 @@
             this.searchbyComboBox.FormattingEnabled = true;
             this.searchbyComboBox.Items.AddRange(new object[] {
             "Search By Title",
-            "Search By Author"});
+            "Search By Author",
+            "Search By Series"});
             this.searchbyComboBox.Location = new System.Drawing.Point(168, 230);
             this.searchbyComboBox.Name = "searchbyComboBox";
             this.searchbyComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;

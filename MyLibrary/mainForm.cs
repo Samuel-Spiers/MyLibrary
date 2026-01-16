@@ -209,7 +209,7 @@ namespace MyLibrary
                     settings[0] = "title";
                 break;
                 case "Author":
-                    settings[0] = "a.last_name"; // This option includes the 'a.' alias because the SQL statement uses a JOIN
+                    settings[0] = "CONCAT(a.first_name, a.last_name)"; // This option includes the 'a.' alias because the SQL statement uses a JOIN
                 break;
                 case "Genre":
                     settings[0] = "genre";
@@ -256,6 +256,7 @@ namespace MyLibrary
             
             // Format search string and gather current filter and sort settings
             string formattedSearch = "%" + search + "%";
+            string joinStatement = "JOIN authors a ON a.author_id = b.author_id"; // Define a default join statement to use for our searches
             Log("Getting filter states...");
             string[,] filterStates = GetFilterStates();
             Log("Getting sort mode settings...");
@@ -263,25 +264,20 @@ namespace MyLibrary
             if (searchType == "Search By Title") {
                 searchType = "title";
             } else if (searchType == "Search By Author") {
-                searchType = "last_name";
+                searchType = "CONCAT(a.first_name, a.last_name)"; // Concatenate first and last name together to allow searching for either part of the name
                 sortSettings[0] = "b." + sortSettings[0];
+            } else if (searchType == "Search By Series") {
+                searchType = "s.series_name";
+                joinStatement = "JOIN series s ON s.series_id = b.series_id"; // Alter join statement if searching by series
             }
 
             // Attempt query assembly
             try {
-                // Build first piece with or without JOIN depending on if we're sorting by author name
-                string queryStart;
-                if (sortSettings[0] == "a.last_name" || searchType == "last_name") {
-                    queryStart = "SELECT * " +
-                                        $"FROM books b " +
-                                        $"JOIN authors a ON a.author_id = b.author_id " +
-                                        $"WHERE {searchType} LIKE '{formattedSearch}' ";
-                    
-                } else {
-                    queryStart = "SELECT * " +
-                                        $"FROM books " +
-                                        $"WHERE {searchType} LIKE '{formattedSearch}' ";
-                }
+                // Build first piece with or without JOIN depending on if we're sorting or searching by author name
+                string queryStart = "SELECT * " +
+                                    $"FROM books b " +
+                                    $"{joinStatement} " +
+                                    $"WHERE {searchType} LIKE '{formattedSearch}' ";
                 string queryMiddle;
                 // Build middle section by dynamically inserting filter values as needed (Only if searching by book title, otherwise it is an empty string)
                 if (searchType == "Title") {
