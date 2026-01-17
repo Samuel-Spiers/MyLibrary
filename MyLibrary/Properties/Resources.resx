@@ -121,6 +121,9 @@
   <data name="bookshelf1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bookshelf1.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MyLibrary Text Logo Transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MyLibrary Text Logo Transparent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MyLibraryIconSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\MyLibraryIconSmall.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

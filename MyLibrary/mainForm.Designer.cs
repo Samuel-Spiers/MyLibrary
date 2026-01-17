@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.searchTextBox = new System.Windows.Forms.TextBox();
-            this.welcomeLabel = new System.Windows.Forms.Label();
             this.searchLabel = new System.Windows.Forms.Label();
             this.librarySizeLabel = new System.Windows.Forms.Label();
             this.genreComboBox = new System.Windows.Forms.ComboBox();
@@ -73,16 +72,23 @@
             this.genreLabel = new System.Windows.Forms.Label();
             this.subGenreTextBox = new System.Windows.Forms.TextBox();
             this.detailsPanel = new System.Windows.Forms.Panel();
+            this.seriesTextBox = new System.Windows.Forms.TextBox();
+            this.seriesLabel = new System.Windows.Forms.Label();
             this.showFiltersCheckBox = new System.Windows.Forms.CheckBox();
             this.filtersPanel = new System.Windows.Forms.Panel();
+            this.seriesComboBox = new System.Windows.Forms.ComboBox();
+            this.seriesFilterLabel = new System.Windows.Forms.Label();
+            this.myLibraryPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.myLibrary1DataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.detailsPanel.SuspendLayout();
             this.filtersPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.myLibraryPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // searchTextBox
             // 
+            this.searchTextBox.BackColor = System.Drawing.Color.Linen;
             this.searchTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchTextBox.Location = new System.Drawing.Point(12, 186);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4);
@@ -90,18 +96,6 @@
             this.searchTextBox.Size = new System.Drawing.Size(359, 39);
             this.searchTextBox.TabIndex = 0;
             this.searchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTextBox_KeyDown);
-            // 
-            // welcomeLabel
-            // 
-            this.welcomeLabel.AutoSize = true;
-            this.welcomeLabel.BackColor = System.Drawing.Color.BurlyWood;
-            this.welcomeLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.welcomeLabel.Font = new System.Drawing.Font("Victorian LET", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.welcomeLabel.Location = new System.Drawing.Point(12, 39);
-            this.welcomeLabel.Name = "welcomeLabel";
-            this.welcomeLabel.Size = new System.Drawing.Size(422, 53);
-            this.welcomeLabel.TabIndex = 1;
-            this.welcomeLabel.Text = "Welcome to MyLibrary";
             // 
             // searchLabel
             // 
@@ -121,7 +115,7 @@
             this.librarySizeLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.librarySizeLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.librarySizeLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.librarySizeLabel.Location = new System.Drawing.Point(12, 97);
+            this.librarySizeLabel.Location = new System.Drawing.Point(12, 110);
             this.librarySizeLabel.Name = "librarySizeLabel";
             this.librarySizeLabel.Size = new System.Drawing.Size(320, 31);
             this.librarySizeLabel.TabIndex = 3;
@@ -129,15 +123,17 @@
             // 
             // genreComboBox
             // 
+            this.genreComboBox.BackColor = System.Drawing.Color.Linen;
             this.genreComboBox.DisplayMember = "genre";
             this.genreComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.genreComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.genreComboBox.FormattingEnabled = true;
-            this.genreComboBox.Location = new System.Drawing.Point(159, 54);
+            this.genreComboBox.Location = new System.Drawing.Point(159, 98);
             this.genreComboBox.Name = "genreComboBox";
             this.genreComboBox.Size = new System.Drawing.Size(153, 37);
             this.genreComboBox.TabIndex = 4;
             this.genreComboBox.ValueMember = "genre";
+            this.genreComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // myLibrary1DataSet
             // 
@@ -146,20 +142,22 @@
             // 
             // subGenreComboBox
             // 
+            this.subGenreComboBox.BackColor = System.Drawing.Color.Linen;
             this.subGenreComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.subGenreComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.subGenreComboBox.FormattingEnabled = true;
-            this.subGenreComboBox.Location = new System.Drawing.Point(159, 97);
+            this.subGenreComboBox.Location = new System.Drawing.Point(159, 141);
             this.subGenreComboBox.Name = "subGenreComboBox";
             this.subGenreComboBox.Size = new System.Drawing.Size(153, 37);
             this.subGenreComboBox.TabIndex = 5;
+            this.subGenreComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // genreFilterLabel
             // 
             this.genreFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.genreFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.genreFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.genreFilterLabel.Location = new System.Drawing.Point(3, 54);
+            this.genreFilterLabel.Location = new System.Drawing.Point(3, 98);
             this.genreFilterLabel.Name = "genreFilterLabel";
             this.genreFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.genreFilterLabel.TabIndex = 6;
@@ -171,7 +169,7 @@
             this.subGenreFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.subGenreFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.subGenreFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subGenreFilterLabel.Location = new System.Drawing.Point(3, 97);
+            this.subGenreFilterLabel.Location = new System.Drawing.Point(3, 141);
             this.subGenreFilterLabel.Name = "subGenreFilterLabel";
             this.subGenreFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.subGenreFilterLabel.TabIndex = 7;
@@ -183,14 +181,15 @@
             this.resultsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.resultsListBox.BackColor = System.Drawing.Color.Linen;
             this.resultsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.resultsListBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resultsListBox.FormattingEnabled = true;
             this.resultsListBox.IntegralHeight = false;
             this.resultsListBox.ItemHeight = 29;
-            this.resultsListBox.Location = new System.Drawing.Point(488, 103);
+            this.resultsListBox.Location = new System.Drawing.Point(488, 71);
             this.resultsListBox.Name = "resultsListBox";
-            this.resultsListBox.Size = new System.Drawing.Size(711, 439);
+            this.resultsListBox.Size = new System.Drawing.Size(711, 438);
             this.resultsListBox.TabIndex = 8;
             this.resultsListBox.SelectedIndexChanged += new System.EventHandler(this.resultsListBox_SelectedIndexChanged);
             // 
@@ -225,13 +224,14 @@
             // searchButton
             // 
             this.searchButton.AutoSize = true;
+            this.searchButton.BackColor = System.Drawing.Color.Linen;
             this.searchButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchButton.Location = new System.Drawing.Point(378, 186);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(103, 39);
             this.searchButton.TabIndex = 12;
             this.searchButton.Text = "Search";
-            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.UseVisualStyleBackColor = false;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // filtersLabel
@@ -248,6 +248,8 @@
             // 
             // searchbyComboBox
             // 
+            this.searchbyComboBox.BackColor = System.Drawing.Color.Linen;
+            this.searchbyComboBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.searchbyComboBox.DisplayMember = "genre";
             this.searchbyComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.searchbyComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -262,16 +264,19 @@
             this.searchbyComboBox.Size = new System.Drawing.Size(203, 37);
             this.searchbyComboBox.TabIndex = 15;
             this.searchbyComboBox.ValueMember = "genre";
+            this.searchbyComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // sortComboBox
             // 
             this.sortComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sortComboBox.BackColor = System.Drawing.Color.Linen;
             this.sortComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sortComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sortComboBox.FormattingEnabled = true;
             this.sortComboBox.Items.AddRange(new object[] {
             "Title",
             "Author",
+            "Series",
             "Genre",
             "Sub Genre",
             "Rating",
@@ -279,32 +284,34 @@
             "Location",
             "Display",
             "TBR"});
-            this.sortComboBox.Location = new System.Drawing.Point(922, 60);
+            this.sortComboBox.Location = new System.Drawing.Point(922, 30);
             this.sortComboBox.Name = "sortComboBox";
             this.sortComboBox.Size = new System.Drawing.Size(130, 37);
             this.sortComboBox.TabIndex = 16;
+            this.sortComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // sortOrderComboBox
             // 
             this.sortOrderComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sortOrderComboBox.BackColor = System.Drawing.Color.Linen;
             this.sortOrderComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sortOrderComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sortOrderComboBox.FormattingEnabled = true;
             this.sortOrderComboBox.Items.AddRange(new object[] {
             "Ascending",
             "Descending"});
-            this.sortOrderComboBox.Location = new System.Drawing.Point(1058, 60);
+            this.sortOrderComboBox.Location = new System.Drawing.Point(1058, 30);
             this.sortOrderComboBox.Name = "sortOrderComboBox";
             this.sortOrderComboBox.Size = new System.Drawing.Size(141, 37);
             this.sortOrderComboBox.TabIndex = 17;
+            this.sortOrderComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // ratingFilterLabel
             // 
-            this.ratingFilterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ratingFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.ratingFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ratingFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ratingFilterLabel.Location = new System.Drawing.Point(3, 141);
+            this.ratingFilterLabel.Location = new System.Drawing.Point(3, 184);
             this.ratingFilterLabel.Name = "ratingFilterLabel";
             this.ratingFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.ratingFilterLabel.TabIndex = 32;
@@ -313,11 +320,10 @@
             // 
             // locationFilterLabel
             // 
-            this.locationFilterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.locationFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.locationFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.locationFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.locationFilterLabel.Location = new System.Drawing.Point(3, 228);
+            this.locationFilterLabel.Location = new System.Drawing.Point(3, 272);
             this.locationFilterLabel.Name = "locationFilterLabel";
             this.locationFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.locationFilterLabel.TabIndex = 33;
@@ -326,11 +332,10 @@
             // 
             // spicinessFilterLabel
             // 
-            this.spicinessFilterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.spicinessFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.spicinessFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.spicinessFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.spicinessFilterLabel.Location = new System.Drawing.Point(3, 184);
+            this.spicinessFilterLabel.Location = new System.Drawing.Point(3, 228);
             this.spicinessFilterLabel.Name = "spicinessFilterLabel";
             this.spicinessFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.spicinessFilterLabel.TabIndex = 34;
@@ -339,11 +344,10 @@
             // 
             // displayFilterLabel
             // 
-            this.displayFilterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.displayFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.displayFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.displayFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayFilterLabel.Location = new System.Drawing.Point(3, 271);
+            this.displayFilterLabel.Location = new System.Drawing.Point(3, 316);
             this.displayFilterLabel.Name = "displayFilterLabel";
             this.displayFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.displayFilterLabel.TabIndex = 35;
@@ -352,11 +356,10 @@
             // 
             // tbrFilterLabel
             // 
-            this.tbrFilterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tbrFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.tbrFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tbrFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbrFilterLabel.Location = new System.Drawing.Point(3, 315);
+            this.tbrFilterLabel.Location = new System.Drawing.Point(3, 360);
             this.tbrFilterLabel.Name = "tbrFilterLabel";
             this.tbrFilterLabel.Size = new System.Drawing.Size(142, 37);
             this.tbrFilterLabel.TabIndex = 36;
@@ -365,36 +368,43 @@
             // 
             // ratingComboBox
             // 
+            this.ratingComboBox.BackColor = System.Drawing.Color.Linen;
             this.ratingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ratingComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ratingComboBox.FormattingEnabled = true;
-            this.ratingComboBox.Location = new System.Drawing.Point(159, 141);
+            this.ratingComboBox.Location = new System.Drawing.Point(159, 184);
             this.ratingComboBox.Name = "ratingComboBox";
             this.ratingComboBox.Size = new System.Drawing.Size(153, 37);
             this.ratingComboBox.TabIndex = 37;
+            this.ratingComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // spicinessComboBox
             // 
+            this.spicinessComboBox.BackColor = System.Drawing.Color.Linen;
             this.spicinessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.spicinessComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.spicinessComboBox.FormattingEnabled = true;
-            this.spicinessComboBox.Location = new System.Drawing.Point(159, 184);
+            this.spicinessComboBox.Location = new System.Drawing.Point(159, 228);
             this.spicinessComboBox.Name = "spicinessComboBox";
             this.spicinessComboBox.Size = new System.Drawing.Size(153, 37);
             this.spicinessComboBox.TabIndex = 38;
+            this.spicinessComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // locationComboBox
             // 
+            this.locationComboBox.BackColor = System.Drawing.Color.Linen;
             this.locationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.locationComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.locationComboBox.FormattingEnabled = true;
-            this.locationComboBox.Location = new System.Drawing.Point(159, 228);
+            this.locationComboBox.Location = new System.Drawing.Point(159, 272);
             this.locationComboBox.Name = "locationComboBox";
             this.locationComboBox.Size = new System.Drawing.Size(153, 37);
             this.locationComboBox.TabIndex = 39;
+            this.locationComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // displayComboBox
             // 
+            this.displayComboBox.BackColor = System.Drawing.Color.Linen;
             this.displayComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.displayComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayComboBox.FormattingEnabled = true;
@@ -402,13 +412,15 @@
             "Any",
             "Yes",
             "No"});
-            this.displayComboBox.Location = new System.Drawing.Point(159, 271);
+            this.displayComboBox.Location = new System.Drawing.Point(159, 316);
             this.displayComboBox.Name = "displayComboBox";
             this.displayComboBox.Size = new System.Drawing.Size(153, 37);
             this.displayComboBox.TabIndex = 40;
+            this.displayComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // tbrComboBox
             // 
+            this.tbrComboBox.BackColor = System.Drawing.Color.Linen;
             this.tbrComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tbrComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbrComboBox.FormattingEnabled = true;
@@ -416,10 +428,11 @@
             "Any",
             "Yes",
             "No"});
-            this.tbrComboBox.Location = new System.Drawing.Point(159, 315);
+            this.tbrComboBox.Location = new System.Drawing.Point(159, 360);
             this.tbrComboBox.Name = "tbrComboBox";
             this.tbrComboBox.Size = new System.Drawing.Size(153, 37);
             this.tbrComboBox.TabIndex = 41;
+            this.tbrComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // sortbyLabel
             // 
@@ -427,7 +440,7 @@
             this.sortbyLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.sortbyLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sortbyLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sortbyLabel.Location = new System.Drawing.Point(821, 63);
+            this.sortbyLabel.Location = new System.Drawing.Point(821, 33);
             this.sortbyLabel.Name = "sortbyLabel";
             this.sortbyLabel.Size = new System.Drawing.Size(95, 31);
             this.sortbyLabel.TabIndex = 42;
@@ -436,9 +449,10 @@
             // displayTextBox
             // 
             this.displayTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.displayTextBox.BackColor = System.Drawing.Color.Linen;
             this.displayTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.displayTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.displayTextBox.Location = new System.Drawing.Point(550, 101);
+            this.displayTextBox.Location = new System.Drawing.Point(550, 140);
             this.displayTextBox.Name = "displayTextBox";
             this.displayTextBox.ReadOnly = true;
             this.displayTextBox.Size = new System.Drawing.Size(158, 32);
@@ -447,9 +461,10 @@
             // tbrTextBox
             // 
             this.tbrTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbrTextBox.BackColor = System.Drawing.Color.Linen;
             this.tbrTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbrTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.tbrTextBox.Location = new System.Drawing.Point(550, 147);
+            this.tbrTextBox.Location = new System.Drawing.Point(550, 186);
             this.tbrTextBox.Name = "tbrTextBox";
             this.tbrTextBox.ReadOnly = true;
             this.tbrTextBox.Size = new System.Drawing.Size(158, 32);
@@ -458,9 +473,10 @@
             // locationTextBox
             // 
             this.locationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.locationTextBox.BackColor = System.Drawing.Color.Linen;
             this.locationTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.locationTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.locationTextBox.Location = new System.Drawing.Point(221, 148);
+            this.locationTextBox.Location = new System.Drawing.Point(221, 187);
             this.locationTextBox.Name = "locationTextBox";
             this.locationTextBox.ReadOnly = true;
             this.locationTextBox.Size = new System.Drawing.Size(158, 32);
@@ -469,9 +485,10 @@
             // spicinessTextBox
             // 
             this.spicinessTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.spicinessTextBox.BackColor = System.Drawing.Color.Linen;
             this.spicinessTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.spicinessTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.spicinessTextBox.Location = new System.Drawing.Point(221, 101);
+            this.spicinessTextBox.Location = new System.Drawing.Point(221, 140);
             this.spicinessTextBox.Name = "spicinessTextBox";
             this.spicinessTextBox.ReadOnly = true;
             this.spicinessTextBox.Size = new System.Drawing.Size(158, 32);
@@ -480,9 +497,10 @@
             // ratingTextBox
             // 
             this.ratingTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ratingTextBox.BackColor = System.Drawing.Color.Linen;
             this.ratingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ratingTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.ratingTextBox.Location = new System.Drawing.Point(550, 9);
+            this.ratingTextBox.Location = new System.Drawing.Point(550, 48);
             this.ratingTextBox.Name = "ratingTextBox";
             this.ratingTextBox.ReadOnly = true;
             this.ratingTextBox.Size = new System.Drawing.Size(158, 32);
@@ -491,9 +509,10 @@
             // genreTextBox
             // 
             this.genreTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.genreTextBox.BackColor = System.Drawing.Color.Linen;
             this.genreTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.genreTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.genreTextBox.Location = new System.Drawing.Point(221, 9);
+            this.genreTextBox.Location = new System.Drawing.Point(221, 48);
             this.genreTextBox.Name = "genreTextBox";
             this.genreTextBox.ReadOnly = true;
             this.genreTextBox.Size = new System.Drawing.Size(158, 32);
@@ -505,7 +524,7 @@
             this.tbrLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.tbrLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tbrLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbrLabel.Location = new System.Drawing.Point(402, 149);
+            this.tbrLabel.Location = new System.Drawing.Point(402, 188);
             this.tbrLabel.Name = "tbrLabel";
             this.tbrLabel.Size = new System.Drawing.Size(142, 31);
             this.tbrLabel.TabIndex = 24;
@@ -518,7 +537,7 @@
             this.displayLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.displayLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.displayLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayLabel.Location = new System.Drawing.Point(402, 102);
+            this.displayLabel.Location = new System.Drawing.Point(402, 141);
             this.displayLabel.Name = "displayLabel";
             this.displayLabel.Size = new System.Drawing.Size(142, 31);
             this.displayLabel.TabIndex = 23;
@@ -531,7 +550,7 @@
             this.locationLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.locationLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.locationLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.locationLabel.Location = new System.Drawing.Point(73, 149);
+            this.locationLabel.Location = new System.Drawing.Point(73, 188);
             this.locationLabel.Name = "locationLabel";
             this.locationLabel.Size = new System.Drawing.Size(142, 31);
             this.locationLabel.TabIndex = 22;
@@ -544,7 +563,7 @@
             this.spicinessLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.spicinessLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.spicinessLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.spicinessLabel.Location = new System.Drawing.Point(73, 102);
+            this.spicinessLabel.Location = new System.Drawing.Point(73, 141);
             this.spicinessLabel.Name = "spicinessLabel";
             this.spicinessLabel.Size = new System.Drawing.Size(142, 31);
             this.spicinessLabel.TabIndex = 21;
@@ -557,7 +576,7 @@
             this.ratingLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.ratingLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ratingLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ratingLabel.Location = new System.Drawing.Point(402, 10);
+            this.ratingLabel.Location = new System.Drawing.Point(402, 49);
             this.ratingLabel.Name = "ratingLabel";
             this.ratingLabel.Size = new System.Drawing.Size(142, 31);
             this.ratingLabel.TabIndex = 20;
@@ -570,7 +589,7 @@
             this.subGenreLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.subGenreLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.subGenreLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subGenreLabel.Location = new System.Drawing.Point(73, 56);
+            this.subGenreLabel.Location = new System.Drawing.Point(73, 95);
             this.subGenreLabel.Name = "subGenreLabel";
             this.subGenreLabel.Size = new System.Drawing.Size(142, 31);
             this.subGenreLabel.TabIndex = 19;
@@ -583,7 +602,7 @@
             this.genreLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.genreLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.genreLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.genreLabel.Location = new System.Drawing.Point(73, 10);
+            this.genreLabel.Location = new System.Drawing.Point(73, 49);
             this.genreLabel.Name = "genreLabel";
             this.genreLabel.Size = new System.Drawing.Size(142, 31);
             this.genreLabel.TabIndex = 18;
@@ -593,9 +612,10 @@
             // subGenreTextBox
             // 
             this.subGenreTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.subGenreTextBox.BackColor = System.Drawing.Color.Linen;
             this.subGenreTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.subGenreTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
-            this.subGenreTextBox.Location = new System.Drawing.Point(221, 55);
+            this.subGenreTextBox.Location = new System.Drawing.Point(221, 94);
             this.subGenreTextBox.Name = "subGenreTextBox";
             this.subGenreTextBox.ReadOnly = true;
             this.subGenreTextBox.Size = new System.Drawing.Size(487, 32);
@@ -604,6 +624,8 @@
             // detailsPanel
             // 
             this.detailsPanel.BackColor = System.Drawing.Color.Transparent;
+            this.detailsPanel.Controls.Add(this.seriesTextBox);
+            this.detailsPanel.Controls.Add(this.seriesLabel);
             this.detailsPanel.Controls.Add(this.subGenreTextBox);
             this.detailsPanel.Controls.Add(this.displayTextBox);
             this.detailsPanel.Controls.Add(this.genreLabel);
@@ -618,11 +640,36 @@
             this.detailsPanel.Controls.Add(this.spicinessLabel);
             this.detailsPanel.Controls.Add(this.displayLabel);
             this.detailsPanel.Controls.Add(this.locationLabel);
-            this.detailsPanel.Location = new System.Drawing.Point(488, 543);
+            this.detailsPanel.Location = new System.Drawing.Point(488, 511);
             this.detailsPanel.Name = "detailsPanel";
-            this.detailsPanel.Size = new System.Drawing.Size(711, 191);
+            this.detailsPanel.Size = new System.Drawing.Size(711, 222);
             this.detailsPanel.TabIndex = 43;
             this.detailsPanel.Visible = false;
+            // 
+            // seriesTextBox
+            // 
+            this.seriesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.seriesTextBox.BackColor = System.Drawing.Color.Linen;
+            this.seriesTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.seriesTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F);
+            this.seriesTextBox.Location = new System.Drawing.Point(221, 4);
+            this.seriesTextBox.Name = "seriesTextBox";
+            this.seriesTextBox.ReadOnly = true;
+            this.seriesTextBox.Size = new System.Drawing.Size(487, 32);
+            this.seriesTextBox.TabIndex = 33;
+            // 
+            // seriesLabel
+            // 
+            this.seriesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.seriesLabel.BackColor = System.Drawing.Color.BurlyWood;
+            this.seriesLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.seriesLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seriesLabel.Location = new System.Drawing.Point(73, 4);
+            this.seriesLabel.Name = "seriesLabel";
+            this.seriesLabel.Size = new System.Drawing.Size(142, 31);
+            this.seriesLabel.TabIndex = 32;
+            this.seriesLabel.Text = "Series:";
+            this.seriesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // showFiltersCheckBox
             // 
@@ -633,7 +680,7 @@
             this.showFiltersCheckBox.FlatAppearance.CheckedBackColor = System.Drawing.Color.Peru;
             this.showFiltersCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.showFiltersCheckBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.showFiltersCheckBox.Location = new System.Drawing.Point(9, 230);
+            this.showFiltersCheckBox.Location = new System.Drawing.Point(12, 230);
             this.showFiltersCheckBox.Name = "showFiltersCheckBox";
             this.showFiltersCheckBox.Size = new System.Drawing.Size(153, 37);
             this.showFiltersCheckBox.TabIndex = 32;
@@ -645,6 +692,8 @@
             // filtersPanel
             // 
             this.filtersPanel.BackColor = System.Drawing.Color.Transparent;
+            this.filtersPanel.Controls.Add(this.seriesComboBox);
+            this.filtersPanel.Controls.Add(this.seriesFilterLabel);
             this.filtersPanel.Controls.Add(this.filtersLabel);
             this.filtersPanel.Controls.Add(this.genreComboBox);
             this.filtersPanel.Controls.Add(this.subGenreComboBox);
@@ -660,11 +709,49 @@
             this.filtersPanel.Controls.Add(this.ratingComboBox);
             this.filtersPanel.Controls.Add(this.displayFilterLabel);
             this.filtersPanel.Controls.Add(this.tbrFilterLabel);
-            this.filtersPanel.Location = new System.Drawing.Point(12, 273);
+            this.filtersPanel.Location = new System.Drawing.Point(12, 269);
             this.filtersPanel.Name = "filtersPanel";
-            this.filtersPanel.Size = new System.Drawing.Size(314, 358);
+            this.filtersPanel.Size = new System.Drawing.Size(469, 403);
             this.filtersPanel.TabIndex = 44;
             this.filtersPanel.Visible = false;
+            // 
+            // seriesComboBox
+            // 
+            this.seriesComboBox.BackColor = System.Drawing.Color.Linen;
+            this.seriesComboBox.DisplayMember = "genre";
+            this.seriesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seriesComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seriesComboBox.FormattingEnabled = true;
+            this.seriesComboBox.Location = new System.Drawing.Point(159, 54);
+            this.seriesComboBox.Name = "seriesComboBox";
+            this.seriesComboBox.Size = new System.Drawing.Size(307, 37);
+            this.seriesComboBox.TabIndex = 43;
+            this.seriesComboBox.ValueMember = "genre";
+            this.seriesComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
+            // 
+            // seriesFilterLabel
+            // 
+            this.seriesFilterLabel.BackColor = System.Drawing.Color.BurlyWood;
+            this.seriesFilterLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.seriesFilterLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seriesFilterLabel.Location = new System.Drawing.Point(3, 54);
+            this.seriesFilterLabel.Name = "seriesFilterLabel";
+            this.seriesFilterLabel.Size = new System.Drawing.Size(142, 37);
+            this.seriesFilterLabel.TabIndex = 42;
+            this.seriesFilterLabel.Text = "Series:";
+            this.seriesFilterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // myLibraryPictureBox
+            // 
+            this.myLibraryPictureBox.BackColor = System.Drawing.Color.BurlyWood;
+            this.myLibraryPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.myLibraryPictureBox.Image = global::MyLibrary.Properties.Resources.MyLibrary_Text_Logo_Transparent;
+            this.myLibraryPictureBox.Location = new System.Drawing.Point(12, 27);
+            this.myLibraryPictureBox.Name = "myLibraryPictureBox";
+            this.myLibraryPictureBox.Size = new System.Drawing.Size(320, 80);
+            this.myLibraryPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.myLibraryPictureBox.TabIndex = 44;
+            this.myLibraryPictureBox.TabStop = false;
             // 
             // mainForm
             // 
@@ -672,6 +759,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelf1;
             this.ClientSize = new System.Drawing.Size(1211, 735);
+            this.Controls.Add(this.myLibraryPictureBox);
             this.Controls.Add(this.filtersPanel);
             this.Controls.Add(this.showFiltersCheckBox);
             this.Controls.Add(this.detailsPanel);
@@ -683,7 +771,6 @@
             this.Controls.Add(this.resultsListBox);
             this.Controls.Add(this.librarySizeLabel);
             this.Controls.Add(this.searchLabel);
-            this.Controls.Add(this.welcomeLabel);
             this.Controls.Add(this.searchTextBox);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Victorian LET", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -701,6 +788,7 @@
             this.detailsPanel.ResumeLayout(false);
             this.detailsPanel.PerformLayout();
             this.filtersPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.myLibraryPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -709,7 +797,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox searchTextBox;
-        private System.Windows.Forms.Label welcomeLabel;
         private System.Windows.Forms.Label searchLabel;
         private System.Windows.Forms.Label librarySizeLabel;
         private System.Windows.Forms.ComboBox genreComboBox;
@@ -754,6 +841,11 @@
         private System.Windows.Forms.Panel detailsPanel;
         private System.Windows.Forms.CheckBox showFiltersCheckBox;
         private System.Windows.Forms.Panel filtersPanel;
+        private System.Windows.Forms.TextBox seriesTextBox;
+        private System.Windows.Forms.Label seriesLabel;
+        private System.Windows.Forms.ComboBox seriesComboBox;
+        private System.Windows.Forms.Label seriesFilterLabel;
+        private System.Windows.Forms.PictureBox myLibraryPictureBox;
     }
 }
 
