@@ -79,6 +79,8 @@
             this.seriesComboBox = new System.Windows.Forms.ComboBox();
             this.seriesFilterLabel = new System.Windows.Forms.Label();
             this.myLibraryPictureBox = new System.Windows.Forms.PictureBox();
+            this.addBookButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.myLibrary1DataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.detailsPanel.SuspendLayout();
@@ -89,6 +91,7 @@
             // searchTextBox
             // 
             this.searchTextBox.BackColor = System.Drawing.Color.Linen;
+            this.searchTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.searchTextBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchTextBox.Location = new System.Drawing.Point(12, 186);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4);
@@ -128,7 +131,7 @@
             this.genreComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.genreComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.genreComboBox.FormattingEnabled = true;
-            this.genreComboBox.Location = new System.Drawing.Point(159, 98);
+            this.genreComboBox.Location = new System.Drawing.Point(159, 97);
             this.genreComboBox.Name = "genreComboBox";
             this.genreComboBox.Size = new System.Drawing.Size(153, 37);
             this.genreComboBox.TabIndex = 4;
@@ -146,7 +149,7 @@
             this.subGenreComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.subGenreComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.subGenreComboBox.FormattingEnabled = true;
-            this.subGenreComboBox.Location = new System.Drawing.Point(159, 141);
+            this.subGenreComboBox.Location = new System.Drawing.Point(159, 140);
             this.subGenreComboBox.Name = "subGenreComboBox";
             this.subGenreComboBox.Size = new System.Drawing.Size(153, 37);
             this.subGenreComboBox.TabIndex = 5;
@@ -225,10 +228,13 @@
             // 
             this.searchButton.AutoSize = true;
             this.searchButton.BackColor = System.Drawing.Color.Linen;
+            this.searchButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.PeachPuff;
+            this.searchButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Bisque;
+            this.searchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.searchButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchButton.Location = new System.Drawing.Point(378, 186);
+            this.searchButton.Location = new System.Drawing.Point(378, 185);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(103, 39);
+            this.searchButton.Size = new System.Drawing.Size(103, 41);
             this.searchButton.TabIndex = 12;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = false;
@@ -258,7 +264,7 @@
             "Search By Title",
             "Search By Author",
             "Search By Series"});
-            this.searchbyComboBox.Location = new System.Drawing.Point(168, 230);
+            this.searchbyComboBox.Location = new System.Drawing.Point(168, 228);
             this.searchbyComboBox.Name = "searchbyComboBox";
             this.searchbyComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.searchbyComboBox.Size = new System.Drawing.Size(203, 37);
@@ -284,7 +290,7 @@
             "Location",
             "Display",
             "TBR"});
-            this.sortComboBox.Location = new System.Drawing.Point(922, 30);
+            this.sortComboBox.Location = new System.Drawing.Point(922, 28);
             this.sortComboBox.Name = "sortComboBox";
             this.sortComboBox.Size = new System.Drawing.Size(130, 37);
             this.sortComboBox.TabIndex = 16;
@@ -300,7 +306,7 @@
             this.sortOrderComboBox.Items.AddRange(new object[] {
             "Ascending",
             "Descending"});
-            this.sortOrderComboBox.Location = new System.Drawing.Point(1058, 30);
+            this.sortOrderComboBox.Location = new System.Drawing.Point(1058, 28);
             this.sortOrderComboBox.Name = "sortOrderComboBox";
             this.sortOrderComboBox.Size = new System.Drawing.Size(141, 37);
             this.sortOrderComboBox.TabIndex = 17;
@@ -372,7 +378,7 @@
             this.ratingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ratingComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ratingComboBox.FormattingEnabled = true;
-            this.ratingComboBox.Location = new System.Drawing.Point(159, 184);
+            this.ratingComboBox.Location = new System.Drawing.Point(159, 183);
             this.ratingComboBox.Name = "ratingComboBox";
             this.ratingComboBox.Size = new System.Drawing.Size(153, 37);
             this.ratingComboBox.TabIndex = 37;
@@ -384,7 +390,7 @@
             this.spicinessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.spicinessComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.spicinessComboBox.FormattingEnabled = true;
-            this.spicinessComboBox.Location = new System.Drawing.Point(159, 228);
+            this.spicinessComboBox.Location = new System.Drawing.Point(159, 227);
             this.spicinessComboBox.Name = "spicinessComboBox";
             this.spicinessComboBox.Size = new System.Drawing.Size(153, 37);
             this.spicinessComboBox.TabIndex = 38;
@@ -396,7 +402,7 @@
             this.locationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.locationComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.locationComboBox.FormattingEnabled = true;
-            this.locationComboBox.Location = new System.Drawing.Point(159, 272);
+            this.locationComboBox.Location = new System.Drawing.Point(159, 271);
             this.locationComboBox.Name = "locationComboBox";
             this.locationComboBox.Size = new System.Drawing.Size(153, 37);
             this.locationComboBox.TabIndex = 39;
@@ -412,7 +418,7 @@
             "Any",
             "Yes",
             "No"});
-            this.displayComboBox.Location = new System.Drawing.Point(159, 316);
+            this.displayComboBox.Location = new System.Drawing.Point(159, 315);
             this.displayComboBox.Name = "displayComboBox";
             this.displayComboBox.Size = new System.Drawing.Size(153, 37);
             this.displayComboBox.TabIndex = 40;
@@ -428,7 +434,7 @@
             "Any",
             "Yes",
             "No"});
-            this.tbrComboBox.Location = new System.Drawing.Point(159, 360);
+            this.tbrComboBox.Location = new System.Drawing.Point(159, 359);
             this.tbrComboBox.Name = "tbrComboBox";
             this.tbrComboBox.Size = new System.Drawing.Size(153, 37);
             this.tbrComboBox.TabIndex = 41;
@@ -722,7 +728,7 @@
             this.seriesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seriesComboBox.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seriesComboBox.FormattingEnabled = true;
-            this.seriesComboBox.Location = new System.Drawing.Point(159, 54);
+            this.seriesComboBox.Location = new System.Drawing.Point(159, 53);
             this.seriesComboBox.Name = "seriesComboBox";
             this.seriesComboBox.Size = new System.Drawing.Size(307, 37);
             this.seriesComboBox.TabIndex = 43;
@@ -753,12 +759,49 @@
             this.myLibraryPictureBox.TabIndex = 44;
             this.myLibraryPictureBox.TabStop = false;
             // 
+            // addBookButton
+            // 
+            this.addBookButton.AutoSize = true;
+            this.addBookButton.BackColor = System.Drawing.Color.Linen;
+            this.addBookButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.PeachPuff;
+            this.addBookButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Bisque;
+            this.addBookButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addBookButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addBookButton.Location = new System.Drawing.Point(488, 27);
+            this.addBookButton.Name = "addBookButton";
+            this.addBookButton.Size = new System.Drawing.Size(136, 41);
+            this.addBookButton.TabIndex = 45;
+            this.addBookButton.Text = "Add a book";
+            this.addBookButton.UseVisualStyleBackColor = false;
+            this.addBookButton.Click += new System.EventHandler(this.addBookButton_Click);
+            // 
+            // removeButton
+            // 
+            this.removeButton.AutoSize = true;
+            this.removeButton.BackColor = System.Drawing.Color.Linen;
+            this.removeButton.Enabled = false;
+            this.removeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.PeachPuff;
+            this.removeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Bisque;
+            this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.removeButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeButton.Location = new System.Drawing.Point(630, 27);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.removeButton.Size = new System.Drawing.Size(134, 41);
+            this.removeButton.TabIndex = 46;
+            this.removeButton.Text = "Remove";
+            this.removeButton.UseVisualStyleBackColor = false;
+            this.removeButton.Visible = false;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelf1;
             this.ClientSize = new System.Drawing.Size(1211, 735);
+            this.Controls.Add(this.removeButton);
+            this.Controls.Add(this.addBookButton);
             this.Controls.Add(this.myLibraryPictureBox);
             this.Controls.Add(this.filtersPanel);
             this.Controls.Add(this.showFiltersCheckBox);
@@ -846,6 +889,8 @@
         private System.Windows.Forms.ComboBox seriesComboBox;
         private System.Windows.Forms.Label seriesFilterLabel;
         private System.Windows.Forms.PictureBox myLibraryPictureBox;
+        private System.Windows.Forms.Button addBookButton;
+        private System.Windows.Forms.Button removeButton;
     }
 }
 

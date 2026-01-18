@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
+using System.Xml.Linq;
 
 namespace MyLibrary
 {
     public partial class mainForm : Form
     {
         List<Book> currentResults = new List<Book>();
+        List<string>[] bookInfoAutocompleteSource = {new List<string>(), new List<string>(), new List<string>(), 
+                                                     new List<string>(), new List<string>(), new List<string>()};
         SqlConnection connection;
         SqlDataReader reader;
         List<string> log = new List<string>(); // List of log entries to print into the debugForm
+        List<string> stackTraceLog = new List<string>(); // List of detailed stack traces
         int logLine = 0; // Current log line number
 
         public mainForm()
@@ -44,7 +44,7 @@ namespace MyLibrary
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Database connection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Log("Connection failed. Error Description:");
-                Log(ex.Message);
+                Log(ex.Message, ex.StackTrace);
             }
 
             PopulateUIElements();
@@ -71,7 +71,7 @@ namespace MyLibrary
         /// <param name="e"></param>
         private void openLogMenuItem_Click(object sender, EventArgs e)
         {
-            debugForm debug = new debugForm();
+            debugForm debug = new debugForm(stackTraceLog);
             debug.PopulateLog(log);
             debug.Show();
         }
@@ -83,20 +83,34 @@ namespace MyLibrary
         private void Log(string msg) {
             logLine++;
             log.Add($"{logLine,-3}| {msg}");
+            stackTraceLog.Add("");
+        }
+
+        /// <summary>
+        /// Overload loggin method for additionally storing a stacktrace string
+        /// Adds a given message to the debug log with a stacktrace
+        /// </summary>
+        /// <param name="msg"></param>
+        private void Log(string msg, string stackTrace) {
+            logLine++;
+            log.Add($"{logLine,-3}| {msg}");
+            stackTraceLog.Add(stackTrace);
         }
 
         private void PopulateUIElements() {
             // Get all books from the database to count how many there are, as well as to populate the filter comboboxes
             try {
-                SqlCommand command = new SqlCommand("SELECT genre, sub_genre, rating, spiciness, location, s.series_name " +
+                SqlCommand command = new SqlCommand("SELECT genre, sub_genre, rating, spiciness, location, s.series_name, CONCAT(CONCAT(a.first_name, ' '), a.last_name)" +
                                                     "FROM books b" +
-                                                    " JOIN series s ON s.series_id = b.series_id", connection);
+                                                    " JOIN series s ON s.series_id = b.series_id" +
+                                                    " JOIN authors a ON a.author_id = b.author_id", connection);
                 Log($"Sending query to database: {command.CommandText}");
                 reader = command.ExecuteReader();
 
                 // Begin reading query return data
                 List<string>[] filterData = {new List<string>(), new List<string>(), new List<string>(), 
-                                             new List<string>(), new List<string>(), new List<string>()};
+                                             new List<string>(), new List<string>(), new List<string>(),
+                                             new List<string>()};
                 int bookCount = 0;
                 while (reader.Read()) {
                     // Add only unique genres to the list
@@ -113,11 +127,11 @@ namespace MyLibrary
                     }
                     // Add only unique ratings to the list
                     if (!filterData[2].Contains(reader[2])) {
-                        filterData[2].Add(reader[2].ToString());
+                        filterData[2].Add(String.Concat(Enumerable.Repeat("★", (int)reader[2])));
                     }
                     // Add only unique spiciness ratings to the list
                     if (!filterData[3].Contains(reader[3])) {
-                        filterData[3].Add(reader[3].ToString());
+                        filterData[3].Add(String.Concat(Enumerable.Repeat("♥", (int)reader[3])));
                     }
                     // Add only unique locations to the list
                     if (!filterData[4].Contains(reader[4])) {
@@ -127,9 +141,20 @@ namespace MyLibrary
                     if (!filterData[5].Contains(reader[5])) {
                         filterData[5].Add(reader[5].ToString());
                     }
+
+                    if (!filterData[6].Contains(reader[6])) {
+                        filterData[6].Add(reader[6].ToString());
+                    }
                      bookCount++;
                 }
                 reader.Close();
+
+                // Prepare all auto complete sources for the book add menu
+                bookInfoAutocompleteSource[0].AddRange(filterData[0]);
+                bookInfoAutocompleteSource[1].AddRange(filterData[1]);
+                bookInfoAutocompleteSource[2].AddRange(filterData[4]);
+                bookInfoAutocompleteSource[3].AddRange(filterData[5]);
+                bookInfoAutocompleteSource[4].AddRange(filterData[6]);
 
                 // Log results and update library size label
                 Log($"Query Success");
@@ -170,8 +195,8 @@ namespace MyLibrary
                 }
 
             } catch (Exception ex) {
-                Log($"Startup failed: {ex.Message}");
-                MessageBox.Show(ex.Message, "Startup Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log($"UI setup failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "UI setup failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -330,7 +355,7 @@ namespace MyLibrary
 
             } catch(Exception e) {
                 Log("Failed to build query string. Error Description:");
-                Log(e.Message);
+                Log(e.Message, e.StackTrace);
             }
 
             return null;
@@ -363,7 +388,7 @@ namespace MyLibrary
                     Log($"Success: {results.Count} results found");
 
                 } catch (Exception ex) {
-                    Log($"Database query failed: {ex.Message}");
+                    Log($"Database query failed: {ex.Message}", ex.StackTrace);
                 }
             } else {
                 return null;
@@ -407,7 +432,7 @@ namespace MyLibrary
                 Log($"Success: {results.Count} results found");
 
             } catch (Exception ex) {
-                Log($"Database query failed: {ex.Message}");
+                Log($"Database query failed: {ex.Message}", ex.StackTrace);
             }
             return results;
         }
@@ -448,7 +473,7 @@ namespace MyLibrary
                 Log($"Success: {results.Count} results found");
 
             } catch (Exception ex) {
-                Log($"Database query failed: {ex.Message}");
+                Log($"Database query failed: {ex.Message}", ex.StackTrace);
             }
             return results;
         }
@@ -480,7 +505,7 @@ namespace MyLibrary
                 return result;
 
             } catch (Exception ex) {
-                Log($"Database query failed: {ex.Message}");
+                Log($"Database query failed: {ex.Message}", ex.StackTrace);
                 return null;
             }
         }
@@ -508,13 +533,15 @@ namespace MyLibrary
         private void resultsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Ensure we don't select anything outside of the filled indexes
-            if (resultsListBox.SelectedIndex != -1) {
+            if (resultsListBox.SelectedIndex != -1 && currentResults[resultsListBox.SelectedIndex] != null) {
                 Book selected = currentResults[resultsListBox.SelectedIndex];
-                if (selected != null) {
-                    PopulateDetails(selected);
-                }
+                PopulateDetails(selected);
+                removeButton.Enabled = true;
+                removeButton.Visible = true;
                 detailsPanel.Visible = true;
             } else {
+                removeButton.Enabled = false;
+                removeButton.Visible = false;
                 detailsPanel.Visible = false;
             }
         }
@@ -532,6 +559,11 @@ namespace MyLibrary
             }
         }
 
+        /// <summary>
+        /// Shows and hides the filters list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void showFiltersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (showFiltersCheckBox.Checked) {
@@ -541,13 +573,18 @@ namespace MyLibrary
             }
         }
 
-        private void DrawComboBox(object sender, DrawItemEventArgs e) {
+        /// <summary>
+        /// Manually drawing the comboboxes to allow for more colour customization
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void DrawComboBox(object sender, DrawItemEventArgs e) {
             var cb = (ComboBox)sender;
 
             // Guard when there is no item to draw. Paint the empty/selected box area
             if (e.Index < 0)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.LightYellow), e.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(Color.Linen), e.Bounds);
                 e.DrawFocusRectangle();
                 return;
             }
@@ -572,6 +609,247 @@ namespace MyLibrary
             }
 
             e.DrawFocusRectangle();
+        }
+
+        /// <summary>
+        /// Retreive an author_id from an author name
+        /// </summary>
+        /// <param name="authorName"></param>
+        /// <returns></returns>
+        private int GetAuthorId(string authorName) {  
+            try {
+                int id = 0;
+                SqlCommand cmd = new SqlCommand($"SELECT author_id " +
+                                                $"FROM authors " +
+                                                $"WHERE CONCAT(CONCAT(first_name, ' '), last_name) LIKE '%{authorName}%'", connection);
+                Log($"Sending search query to database: {cmd.CommandText}");
+                reader = cmd.ExecuteReader();
+                if (reader.Read()) {
+                    id = (int)reader[0];
+                }
+                reader.Close();
+                Log($"Success");
+                // If we didn't find an id, return -1
+                if (id == 0) {
+                    return -1;
+                }
+                return id;
+
+            } catch (Exception ex) {
+                Log($"Failed getting author id: {ex.Message}", ex.StackTrace);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Retreive a series_id from a series name
+        /// </summary>
+        /// <param name="seriesName"></param>
+        /// <returns></returns>
+        private int GetSeriesId(string seriesName) {
+            try {
+                int id = 0;
+                SqlCommand cmd = new SqlCommand($"SELECT series_id " +
+                                                $"FROM series " +
+                                                $"WHERE series_name LIKE '%{seriesName}%'", connection);
+                Log($"Sending search query to database: {cmd.CommandText}");
+                reader = cmd.ExecuteReader();
+                if (reader.Read()) {
+                    id = (int)reader[0];
+                }
+                reader.Close();
+                Log($"Success");
+                // If we didn't find an id, return -1
+                if (id == 0) {
+                    return -1;
+                }
+                return id;
+
+            } catch (Exception ex) {
+                Log(ex.Message, ex.StackTrace);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Inserts a new author entry into the database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Newly created author_id on success, -1 on failure</returns>
+        private int InsertAuthor(string name) {
+
+            string[] nameParts = name.Split(' ');
+            try {
+                SqlCommand cmd = new SqlCommand($"INSERT INTO authors " +
+                                                $"VALUES ('{nameParts[0]}', '{nameParts[1]}')", connection);
+
+                Log($"Sending search query to database: {cmd.CommandText}");
+                int rows = cmd.ExecuteNonQuery();
+                Log($"Author insert successful. {rows} rows affected\"");
+
+                // Search for the inserted author, validating its existence
+                cmd = new SqlCommand($"SELECT author_id " +
+                                     $"FROM authors " +
+                                     $"WHERE first_name = '{nameParts[0]}' " +
+                                     $"AND last_name = '{nameParts[1]}'", connection);
+                
+                Log($"Sending search query to database: {cmd.CommandText}");
+                reader = cmd.ExecuteReader();
+                if (reader.Read() && reader[0] != null) {
+                    Log($"New author_id retrieval successful. Insert validated");
+                    reader.Close();
+                    return (int)reader[0];
+                }
+                reader.Close();
+                Log($"Author insert not validated");
+                return -1;
+            } catch (Exception ex) {
+                Log($"Author insert failed: {ex.Message}", ex.StackTrace);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Inserts a new series entry into the database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="author_id"></param>
+        /// <returns>Newly created series_id on success, -1 on failure</returns>
+        private int InsertSeries(string name, int author_id) {
+
+            try {
+                SqlCommand cmd = new SqlCommand($"INSERT INTO series " +
+                                                $"VALUES ('{name}', '{author_id}')", connection);
+
+                Log($"Sending search query to database: {cmd.CommandText}");
+                int rows = cmd.ExecuteNonQuery();
+                Log($"Series insert successful. {rows} rows affected");
+
+                // Search for the inserted series, validating its existence
+                cmd = new SqlCommand($"SELECT series_id " +
+                                        $"FROM series " +
+                                        $"WHERE series_name = '{name}'", connection);
+                
+                Log($"Sending search query to database: {cmd.CommandText}");
+                reader = cmd.ExecuteReader();
+                if (reader.Read() && reader[0] != null) {
+                    Log($"New series_id retrieval successful. Insert validated");
+                    reader.Close();
+                    return (int)reader[0];
+                }
+                reader.Close();
+                Log($"Series insert not validated");
+                return -1;
+            } catch (Exception ex) {
+                Log($"Series insert failed: {ex.Message}", ex.StackTrace);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Overload of BuildQueryString for inert/delete usage
+        /// Build an SQL query for adding or removing a book from the database
+        /// </summary>
+        /// <param name="bookInfo">title, author_name, series_name, genre, subGenre, location, rating, spiciness, display, tbr</param>
+        /// <param name="adding"></param>
+        /// <returns></returns>
+        private string BuildQueryString(string[] bookInfo, bool adding) {
+
+            
+            
+            string query;
+            if (adding) {
+
+                // If we couldn't find the series_id (series doesn't exist yet) create a new series entry
+                if (GetSeriesId(bookInfo[2]) == -1) {
+                    // Use a ternary operator to use the author id if it can be found, or insert a new author if it can't be found
+                    InsertSeries(bookInfo[2], GetAuthorId(bookInfo[1]) != -1 ? GetAuthorId(bookInfo[1]) : InsertAuthor(bookInfo[1]));
+                }
+
+                // If we couldn't find the author_id (author doesn't exist yet) create a new author entry
+                if (GetAuthorId(bookInfo[1]) == -1) {
+                    InsertAuthor(bookInfo[1]);
+                }
+
+                query = $"INSERT INTO books " +
+                        $"VALUES ({GetAuthorId(bookInfo[1])}, {GetSeriesId(bookInfo[2])}, '{bookInfo[0]}', '{bookInfo[5]}', " +
+                        $"'{bookInfo[3]}', '{bookInfo[4]}', {bookInfo[7].Length}, {bookInfo[6].Length}, {bookInfo[8]}, {bookInfo[9]})";
+            } else {
+                query = $"DELETE FROM books " +
+                        $"WHERE title = '{bookInfo[0]}'";
+            }
+            return query;
+        }
+        
+        /// <summary>
+        /// Opens the book adding dialog and adds the entered book into the database
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addBookButton_Click(object sender, EventArgs e)
+        {
+            addBookForm addForm = new addBookForm(this, bookInfoAutocompleteSource);
+            if (addForm.ShowDialog(this) == DialogResult.OK) {
+
+                string insertString = BuildQueryString(addForm.BookInfo, true);
+                try {
+                    SqlCommand insertCommand = new SqlCommand(insertString, connection);
+                    Log($"Sending insert command to database: {insertCommand.CommandText}");
+                    int rows = insertCommand.ExecuteNonQuery();
+                    Log($"Series insert successful. {rows} rows affected");
+                    // Search for the inserted book, validating its existance
+                    SqlCommand cmd = new SqlCommand($"SELECT title " +
+                                            $"FROM books " +
+                                            $"WHERE title = '{addForm.BookInfo[0]}'", connection);
+                    reader = cmd.ExecuteReader();
+                    if (reader.Read() && reader[0] != null) {
+                        Log("Book insert validation successful");
+                    }
+                    reader.Close();
+
+                    searchButton_Click(sender, e);
+                } catch (Exception ex) {
+                    Log($"Book insert failed: {ex.Message}", ex.StackTrace);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes a book from the database
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void removeButton_Click(object sender, EventArgs e)
+        {
+            Book toRemove = currentResults[resultsListBox.SelectedIndex];
+
+            if (toRemove != null) {
+                DialogResult choice = MessageBox.Show("Are you sure?", $"Deleting {toRemove.Title}", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
+                if (choice == DialogResult.Yes) {
+                    string deleteString = BuildQueryString(new string[]{toRemove.Title}, false);
+                    try {
+                        SqlCommand deleteCommand = new SqlCommand(deleteString, connection);
+                        Log($"Sending delete command to database: {deleteCommand.CommandText}");
+                        int rows = deleteCommand.ExecuteNonQuery();
+                        Log($"Book delete successful. {rows} rows affected");
+                        // Search for the inserted book, validating its existance
+                        SqlCommand cmd = new SqlCommand($"SELECT title " +
+                                                $"FROM books " +
+                                                $"WHERE title = '{toRemove.Title}'", connection);
+                        reader = cmd.ExecuteReader();
+                        if (reader.Read() && reader[0] != null) {
+                            Log("Book delete validation successful");
+                        }
+                        reader.Close();
+
+                        searchButton_Click(sender, e);
+
+                    } catch (Exception ex) {
+                        Log($"Book delete failed: {ex.Message}", ex.StackTrace);
+                    }
+                }
+            }
         }
     }
 }
