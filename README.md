@@ -4,8 +4,21 @@ Book collection tracking app
 
 This app uses a Microsoft Access database system to keep track of your book collection for you.
 
-It is heavily work in progress and only currently features the ability to search for book titles, of which there are two in the database for testing.
 
-TODO: Search by author name
-TODO: Add and remove your books from the database
-TODO: Filter by genre, subgenre, etc.
+
+Features
+
+--------
+
+* Adding/Removing books
+* Stores data including book title, author, series, personal ratings, book location, whether the book is just for display, and whether you've read the book yet or not
+* Searching by book title, author name, or series name
+* Filtering by any piece of book information
+* Sorting by any piece of book information
+
+
+
+TODO: Add ability to update/edit a book after it has been added
+
+TODO: Try blurring background image a bit to reduce visual clutter
+
