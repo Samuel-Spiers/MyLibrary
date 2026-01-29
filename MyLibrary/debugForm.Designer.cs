@@ -105,7 +105,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelf1;
+            this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelfBlur;
             this.ClientSize = new System.Drawing.Size(1067, 830);
             this.Controls.Add(this.stacktraceLabel);
             this.Controls.Add(this.stackTraceTextBox);

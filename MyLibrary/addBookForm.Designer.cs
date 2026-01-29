@@ -356,7 +356,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 29F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelf1;
+            this.BackgroundImage = global::MyLibrary.Properties.Resources.bookshelfBlur;
             this.ClientSize = new System.Drawing.Size(566, 675);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.confirmButton);

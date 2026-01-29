@@ -1,6 +1,6 @@
 ﻿namespace MyLibrary
 {
-    internal class Book
+    public class Book
     {
         public int Id {get;}
         public int Author_Id {get;}

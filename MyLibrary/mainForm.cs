@@ -11,6 +11,7 @@ namespace MyLibrary
 {
     public partial class mainForm : Form
     {
+        Book selectedBook;
         List<Book> currentResults = new List<Book>();
         List<string>[] bookInfoAutocompleteSource = {new List<string>(), new List<string>(), new List<string>(), 
                                                      new List<string>(), new List<string>(), new List<string>()};
@@ -300,7 +301,7 @@ namespace MyLibrary
         /// Builds an SQL search query using provided values including search text, search type, and the current filter and sorting settings
         /// </summary>
         /// <param name="search">User's entered search string</param>
-        /// <param name="searchType">Type of search being performed (title, author)</param>
+        /// <param name="searchType">Type of search being performed ("Search By" + Title, Author, or Series)</param>
         /// <returns>Fully formatted SQL query string for an SqlCommand object to use</returns>
         private string BuildQueryString(string search, string searchType) {
             
@@ -354,8 +355,8 @@ namespace MyLibrary
                 return queryStart + queryMiddle + queryEnd;
 
             } catch(Exception e) {
-                Log("Failed to build query string. Error Description:");
-                Log(e.Message, e.StackTrace);
+                Log($"Failed to build query string: {e.Message}", e.StackTrace);
+                MessageBox.Show(e.Message, "Query string assembly failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return null;
@@ -389,6 +390,7 @@ namespace MyLibrary
 
                 } catch (Exception ex) {
                     Log($"Database query failed: {ex.Message}", ex.StackTrace);
+                    MessageBox.Show(ex.Message, "Query failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             } else {
                 return null;
@@ -401,7 +403,7 @@ namespace MyLibrary
         /// </summary>
         /// <param name="books"></param>
         /// <returns>A list of all author names related to the given books</returns>
-        private List<Author> GetAuthors(List<Book> books) {
+        public List<Author> GetAuthors(List<Book> books) {
 
             List<Author> results = new List<Author>();
 
@@ -432,9 +434,46 @@ namespace MyLibrary
                 Log($"Success: {results.Count} results found");
 
             } catch (Exception ex) {
-                Log($"Database query failed: {ex.Message}", ex.StackTrace);
+                Log($"Get authors failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Query failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return results;
+        }
+
+        /// <summary>
+        /// Query the database for an author based on a single book
+        /// </summary>
+        /// <param name="book">The book to find the author name of</param>
+        /// <returns>A list of all author names related to the given books</returns>
+        public Author GetAuthor(Book book) {
+
+            Author result;
+
+            try {
+                // Prepare the SQL command
+                SqlCommand command = new SqlCommand("SELECT * " +
+                                                    "FROM authors " +
+                                                   $"WHERE author_id IN ({book.Author_Id})", connection);
+                Log($"Sending search query to database: {command.CommandText}");
+
+                // Query the database to find the authors and read the output into an array
+                reader = command.ExecuteReader();
+                // Read the query results into the author list
+                if (reader.Read()) {
+                    result = new Author((int)reader[0], (string)reader[1], (string)reader[2]);
+                    reader.Close();
+                    Log($"Success: Author found");
+                    return result;
+                } else {
+                    throw new Exception();
+                }
+
+            } catch (Exception ex) {
+                Log($"Get author failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Query failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -473,18 +512,19 @@ namespace MyLibrary
                 Log($"Success: {results.Count} results found");
 
             } catch (Exception ex) {
-                Log($"Database query failed: {ex.Message}", ex.StackTrace);
+                Log($"Get series failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Query failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return results;
         }
 
         /// <summary>
         /// Single book search overload of GetSeries method 
-        /// Query the database for a series based on a single books
+        /// Query the database for a series based on a single book
         /// </summary>
         /// <param name="books"></param>
         /// <returns>A list of all author names related to the given books</returns>
-        private Series GetSeries(Book book) {
+        public Series GetSeries(Book book) {
 
             try {
                 // Prepare the SQL command
@@ -506,6 +546,7 @@ namespace MyLibrary
 
             } catch (Exception ex) {
                 Log($"Database query failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Get series failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
         }
@@ -534,8 +575,8 @@ namespace MyLibrary
         {
             // Ensure we don't select anything outside of the filled indexes
             if (resultsListBox.SelectedIndex != -1 && currentResults[resultsListBox.SelectedIndex] != null) {
-                Book selected = currentResults[resultsListBox.SelectedIndex];
-                PopulateDetails(selected);
+                selectedBook = currentResults[resultsListBox.SelectedIndex];
+                PopulateDetails(selectedBook);
                 removeButton.Enabled = true;
                 removeButton.Visible = true;
                 detailsPanel.Visible = true;
@@ -628,15 +669,17 @@ namespace MyLibrary
                     id = (int)reader[0];
                 }
                 reader.Close();
-                Log($"Success");
                 // If we didn't find an id, return -1
                 if (id == 0) {
+                    Log("Author not found");
                     return -1;
                 }
+                Log($"Success");
                 return id;
 
             } catch (Exception ex) {
                 Log($"Failed getting author id: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Get author failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
         }
@@ -658,15 +701,17 @@ namespace MyLibrary
                     id = (int)reader[0];
                 }
                 reader.Close();
-                Log($"Success");
                 // If we didn't find an id, return -1
                 if (id == 0) {
+                    Log("Series not found");
                     return -1;
                 }
+                Log($"Success");
                 return id;
 
             } catch (Exception ex) {
                 Log(ex.Message, ex.StackTrace);
+                MessageBox.Show(ex.Message, "Get series failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
         }
@@ -683,7 +728,7 @@ namespace MyLibrary
                 SqlCommand cmd = new SqlCommand($"INSERT INTO authors " +
                                                 $"VALUES ('{nameParts[0]}', '{nameParts[1]}')", connection);
 
-                Log($"Sending search query to database: {cmd.CommandText}");
+                Log($"Sending insert query to database: {cmd.CommandText}");
                 int rows = cmd.ExecuteNonQuery();
                 Log($"Author insert successful. {rows} rows affected\"");
 
@@ -697,14 +742,16 @@ namespace MyLibrary
                 reader = cmd.ExecuteReader();
                 if (reader.Read() && reader[0] != null) {
                     Log($"New author_id retrieval successful. Insert validated");
+                    int authorId = (int)reader[0];
                     reader.Close();
-                    return (int)reader[0];
+                    return authorId;
+                } else {
+                    reader.Close();
+                    throw new Exception("Author insert not validated");
                 }
-                reader.Close();
-                Log($"Author insert not validated");
-                return -1;
             } catch (Exception ex) {
                 Log($"Author insert failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Author insert failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
         }
@@ -721,7 +768,7 @@ namespace MyLibrary
                 SqlCommand cmd = new SqlCommand($"INSERT INTO series " +
                                                 $"VALUES ('{name}', '{author_id}')", connection);
 
-                Log($"Sending search query to database: {cmd.CommandText}");
+                Log($"Sending insert query to database: {cmd.CommandText}");
                 int rows = cmd.ExecuteNonQuery();
                 Log($"Series insert successful. {rows} rows affected");
 
@@ -734,55 +781,90 @@ namespace MyLibrary
                 reader = cmd.ExecuteReader();
                 if (reader.Read() && reader[0] != null) {
                     Log($"New series_id retrieval successful. Insert validated");
+                    int seriesId = (int)reader[0];
                     reader.Close();
-                    return (int)reader[0];
+                    return seriesId;
+                } else {
+                    reader.Close();
+                    throw new Exception("Series insert not validated");
                 }
-                reader.Close();
-                Log($"Series insert not validated");
-                return -1;
             } catch (Exception ex) {
                 Log($"Series insert failed: {ex.Message}", ex.StackTrace);
+                MessageBox.Show(ex.Message, "Series insert failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -1;
             }
         }
 
         /// <summary>
-        /// Overload of BuildQueryString for inert/delete usage
-        /// Build an SQL query for adding or removing a book from the database
+        /// Overload of BuildQueryString for insert/delete/update usage
+        /// Build an SQL query for adding/removing/updating a book
         /// </summary>
-        /// <param name="bookInfo">title, author_name, series_name, genre, subGenre, location, rating, spiciness, display, tbr</param>
-        /// <param name="adding"></param>
+        /// <param name="bookInfo">title, author_name, series_name, genre, sub_genre, location, rating, spiciness, display, tbr</param>
+        /// <param name="actionType">1 = Insert a book, 2 = Delete a book, 3 = Update a book</param>
         /// <returns></returns>
-        private string BuildQueryString(string[] bookInfo, bool adding) {
+        private string BuildQueryString(string[] bookInfo, int actionType) {
 
-            
-            
-            string query;
-            if (adding) {
-
+            string query = "";
+            if (actionType == 1) {
+                Log("Building insert query...");
                 // If we couldn't find the series_id (series doesn't exist yet) create a new series entry
                 if (GetSeriesId(bookInfo[2]) == -1) {
                     // Use a ternary operator to use the author id if it can be found, or insert a new author if it can't be found
                     InsertSeries(bookInfo[2], GetAuthorId(bookInfo[1]) != -1 ? GetAuthorId(bookInfo[1]) : InsertAuthor(bookInfo[1]));
                 }
-
                 // If we couldn't find the author_id (author doesn't exist yet) create a new author entry
                 if (GetAuthorId(bookInfo[1]) == -1) {
                     InsertAuthor(bookInfo[1]);
                 }
-
                 query = $"INSERT INTO books " +
                         $"VALUES ({GetAuthorId(bookInfo[1])}, {GetSeriesId(bookInfo[2])}, '{bookInfo[0]}', '{bookInfo[5]}', " +
                         $"'{bookInfo[3]}', '{bookInfo[4]}', {bookInfo[7].Length}, {bookInfo[6].Length}, {bookInfo[8]}, {bookInfo[9]})";
-            } else {
+
+            } else if (actionType == 2) {
+                Log("Building delete query...");
                 query = $"DELETE FROM books " +
                         $"WHERE title = '{bookInfo[0]}'";
+
+            } else if (actionType == 3) {
+                Log("Building update query...");
+                int bookId = -1;
+                // Get the id of the book we're trying to edit
+                try {
+                    string bookIdQuery = BuildQueryString(selectedBook.Title, "Search By Title");
+                    SqlCommand cmd = new SqlCommand(bookIdQuery, connection);
+                    Log($"Sending query to database: {cmd.CommandText}");
+                    reader = cmd.ExecuteReader();
+                    if (reader.Read()) {
+                        Log(reader[0].ToString());
+                        bookId = (int)reader[0];
+                    }
+                    reader.Close();
+                    Log($"New Series Name: {bookInfo[2]}");
+                    // If we couldn't find the series_id (series doesn't exist yet) create a new series entry
+                    if (GetSeriesId(bookInfo[2]) == -1) {
+                        Log("Inserting new series");
+                        // Use a ternary operator to use the author id if it can be found, or insert a new author if it can't be found
+                        InsertSeries(bookInfo[2], GetAuthorId(bookInfo[1]) != -1 ? GetAuthorId(bookInfo[1]) : InsertAuthor(bookInfo[1]));
+                    }
+                    // If we couldn't find the author_id (author doesn't exist yet) create a new author entry
+                    if (GetAuthorId(bookInfo[1]) == -1) {
+                        InsertAuthor(bookInfo[1]);
+                    }
+                    query = $"UPDATE books " +
+                        $"SET title = '{bookInfo[0]}', author_id = {GetAuthorId(bookInfo[1])}, series_id = {GetSeriesId(bookInfo[2])}, genre = '{bookInfo[3]}', " +
+                        $"sub_genre = '{bookInfo[4]}', location = '{bookInfo[5]}', rating = {bookInfo[6].Length}, spiciness = {bookInfo[7].Length}, is_display = {bookInfo[8]}, " +
+                        $"to_be_read = {bookInfo[9]} " +
+                        $"WHERE book_id = {bookId}";
+
+                } catch (Exception ex) {
+                    Log($"Book id search failed: {ex.Message}", ex.StackTrace);
+                }
             }
             return query;
         }
         
         /// <summary>
-        /// Opens the book adding dialog and adds the entered book into the database
+        /// Opens the book adding dialog and adds the entered book into the database, then searches for that book to validate the entry
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -791,12 +873,12 @@ namespace MyLibrary
             addBookForm addForm = new addBookForm(this, bookInfoAutocompleteSource);
             if (addForm.ShowDialog(this) == DialogResult.OK) {
 
-                string insertString = BuildQueryString(addForm.BookInfo, true);
+                string insertString = BuildQueryString(addForm.BookInfo, 1);
                 try {
                     SqlCommand insertCommand = new SqlCommand(insertString, connection);
                     Log($"Sending insert command to database: {insertCommand.CommandText}");
                     int rows = insertCommand.ExecuteNonQuery();
-                    Log($"Series insert successful. {rows} rows affected");
+                    Log($"Book insert successful. {rows} rows affected");
                     // Search for the inserted book, validating its existance
                     SqlCommand cmd = new SqlCommand($"SELECT title " +
                                             $"FROM books " +
@@ -810,12 +892,13 @@ namespace MyLibrary
                     searchButton_Click(sender, e);
                 } catch (Exception ex) {
                     Log($"Book insert failed: {ex.Message}", ex.StackTrace);
+                    MessageBox.Show(ex.Message, "Book insert failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         /// <summary>
-        /// Removes a book from the database
+        /// Removes a book from the database, then searches for the bok to validate that it is gone
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -827,7 +910,7 @@ namespace MyLibrary
                 DialogResult choice = MessageBox.Show("Are you sure?", $"Deleting {toRemove.Title}", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
 
                 if (choice == DialogResult.Yes) {
-                    string deleteString = BuildQueryString(new string[]{toRemove.Title}, false);
+                    string deleteString = BuildQueryString(new string[]{toRemove.Title}, 2);
                     try {
                         SqlCommand deleteCommand = new SqlCommand(deleteString, connection);
                         Log($"Sending delete command to database: {deleteCommand.CommandText}");
@@ -847,7 +930,40 @@ namespace MyLibrary
 
                     } catch (Exception ex) {
                         Log($"Book delete failed: {ex.Message}", ex.StackTrace);
+                        MessageBox.Show(ex.Message, "Book delete failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates a book in the database, then validates the update by checking that 1 row was updated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            editBookForm editForm = new editBookForm(this, selectedBook);
+            int selectedIndex = resultsListBox.SelectedIndex;
+            if (editForm.ShowDialog(this) == DialogResult.OK) {
+
+                string updateString = BuildQueryString(editForm.BookInfo, 3);
+                try {
+                    SqlCommand cmd = new SqlCommand (updateString, connection);
+                    Log($"Sending update command to database: {cmd.CommandText}");
+                    int rows = cmd.ExecuteNonQuery();
+                    if (rows == 1) {
+                        Log($"Book update successful. {rows} row affected");
+                    } else {
+                        throw new Exception($"Update failed: {rows} rows affected. Should be 1");
+                    }
+                    // Update the UI to reflect changes
+                    searchButton_Click(sender, e);
+                    resultsListBox.SelectedIndex = selectedIndex;
+
+                } catch (Exception ex) {
+                    Log($"Book update failed: {ex.Message}", ex.StackTrace);
+                    MessageBox.Show(ex.Message, "Book update failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

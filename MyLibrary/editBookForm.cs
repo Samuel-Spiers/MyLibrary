@@ -1,35 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 
 namespace MyLibrary
 {
-    public partial class addBookForm : Form
+    public partial class editBookForm : Form
     {
         private readonly mainForm Main;
+        private readonly Book SelectedBook;
 
         public string[] BookInfo {get; set;} = new string[10];
 
-        public addBookForm(mainForm main, List<string>[] autoCompleteSource)
+        public editBookForm(mainForm main, Book selectedBook)
         {
             InitializeComponent();
             Main = main;
+            SelectedBook = selectedBook;
 
             // Set all comboboxes to be manually drawn
             ratingComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             spicinessComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             displayComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             tbrComboBox.DrawMode = DrawMode.OwnerDrawFixed;
-    
-            // Populate all auto complete sources
-            genreTextBox.AutoCompleteCustomSource.AddRange(autoCompleteSource[0].ToArray());
-            subGenreTextBox.AutoCompleteCustomSource.AddRange(autoCompleteSource[1].ToArray());
-            locationTextBox.AutoCompleteCustomSource.AddRange(autoCompleteSource[2].ToArray());
-            seriesTextBox.AutoCompleteCustomSource.AddRange(autoCompleteSource[3].ToArray());
-            authorNameTextBox.AutoCompleteCustomSource.AddRange(autoCompleteSource[4].ToArray());
+
+            // Populate all current book data
+            titleTextBox.Text = selectedBook.Title;
+            Author author = Main.GetAuthor(selectedBook);
+            authorNameTextBox.Text = author.FirstName + " " + author.LastName;
+            Series series = Main.GetSeries(selectedBook);
+            seriesTextBox.Text = series.Name;
+            genreTextBox.Text = selectedBook.Genre;
+            subGenreTextBox.Text = selectedBook.SubGenre;
+            locationTextBox.Text = selectedBook.Location;
+            ratingComboBox.SelectedIndex = selectedBook.Rating.ToString().Length - 1;
+            spicinessComboBox.SelectedIndex = selectedBook.Spiciness.ToString().Length - 1;
+            displayComboBox.SelectedIndex = selectedBook.IsDisplay == true ? 0 : 1;
+            tbrComboBox.SelectedIndex = selectedBook.ToBeRead == true ? 0 : 1;
         }
 
-        private void confirmButton_Click(object sender, System.EventArgs e)
+        private void updateButton_Click(object sender, EventArgs e)
         {
             string title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(titleTextBox.Text.ToLower());
             string author_name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(authorNameTextBox.Text.ToLower());
@@ -47,7 +57,7 @@ namespace MyLibrary
             DialogResult = DialogResult.OK;
         }
 
-        private void cancelButton_Click(object sender, System.EventArgs e)
+        private void cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

@@ -73,6 +73,16 @@ namespace MyLibrary.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bookshelfBlur {
+            get {
+                object obj = ResourceManager.GetObject("bookshelfBlur", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MyLibrary_Text_Logo_Transparent {
             get {
                 object obj = ResourceManager.GetObject("MyLibrary Text Logo Transparent", resourceCulture);

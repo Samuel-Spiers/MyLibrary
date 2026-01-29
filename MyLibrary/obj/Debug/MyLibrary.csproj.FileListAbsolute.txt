@@ -11,3 +11,4 @@ C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLi
 C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.exe.config
 C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.addBookForm.resources
 C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.debugForm.resources
+C:\Users\samow\OneDrive\Desktop\Solo Projects\MyLibrary\MyLibrary\obj\Debug\MyLibrary.editBookForm.resources

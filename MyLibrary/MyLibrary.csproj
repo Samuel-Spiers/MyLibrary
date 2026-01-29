@@ -61,6 +61,12 @@
     <Compile Include="debugForm.Designer.cs">
       <DependentUpon>debugForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="editBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="editBookForm.Designer.cs">
+      <DependentUpon>editBookForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="debugForm.resx">
       <DependentUpon>debugForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="editBookForm.resx">
+      <DependentUpon>editBookForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
@@ -123,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bookshelf1.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bookshelfBlur.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
