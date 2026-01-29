@@ -11,14 +11,8 @@ Features
 --------
 
 * Adding/Removing books
+* Updating existing books
 * Stores data including book title, author, series, personal ratings, book location, whether the book is just for display, and whether you've read the book yet or not
 * Searching by book title, author name, or series name
 * Filtering by any piece of book information
 * Sorting by any piece of book information
-
-
-
-TODO: Add ability to update/edit a book after it has been added
-
-TODO: Try blurring background image a bit to reduce visual clutter
-
