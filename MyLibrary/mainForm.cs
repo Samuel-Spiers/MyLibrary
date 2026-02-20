@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -33,11 +34,16 @@ namespace MyLibrary
         /// <param name="e"></param>
         private void mainForm_Load(object sender, EventArgs e)
         {
+        AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
+        var dd = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+        Log("DataDirectory=" + dd);
+        Log("DB exists? " + File.Exists(Path.Combine(dd, "MyLibrary1.accdb")));
+
             // Attempt to establish the database connection
             try
             {
                 Log("Attempting to establish database connection...");
-                Log(@"Connection string: ""Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\""MyLibrary1.accdb\""""");
+                Log(@"Connection string: ""Provider=Microsoft.ACE.OLEDB.16.0;Data Source=|DataDirectory|\MyLibrary1.accdb;Persist Security Info=False;""""");
                 connection = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=library;Integrated Security=True");
                 connection.Open();
                 Log("Connection successful");
