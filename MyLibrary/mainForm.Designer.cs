@@ -72,6 +72,7 @@
             this.genreLabel = new System.Windows.Forms.Label();
             this.subGenreTextBox = new System.Windows.Forms.TextBox();
             this.detailsPanel = new System.Windows.Forms.Panel();
+            this.editButton = new System.Windows.Forms.Button();
             this.seriesTextBox = new System.Windows.Forms.TextBox();
             this.seriesLabel = new System.Windows.Forms.Label();
             this.showFiltersCheckBox = new System.Windows.Forms.CheckBox();
@@ -81,7 +82,6 @@
             this.myLibraryPictureBox = new System.Windows.Forms.PictureBox();
             this.addBookButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
-            this.editButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.myLibrary1DataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.detailsPanel.SuspendLayout();
@@ -448,7 +448,7 @@
             this.sortbyLabel.BackColor = System.Drawing.Color.BurlyWood;
             this.sortbyLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sortbyLabel.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sortbyLabel.Location = new System.Drawing.Point(857, 33);
+            this.sortbyLabel.Location = new System.Drawing.Point(845, 31);
             this.sortbyLabel.Name = "sortbyLabel";
             this.sortbyLabel.Size = new System.Drawing.Size(95, 31);
             this.sortbyLabel.TabIndex = 42;
@@ -656,6 +656,18 @@
             this.detailsPanel.TabIndex = 43;
             this.detailsPanel.Visible = false;
             // 
+            // editButton
+            // 
+            this.editButton.AutoSize = true;
+            this.editButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editButton.Location = new System.Drawing.Point(8, 1);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(95, 39);
+            this.editButton.TabIndex = 47;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
             // seriesTextBox
             // 
             this.seriesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -797,18 +809,6 @@
             this.removeButton.UseVisualStyleBackColor = false;
             this.removeButton.Visible = false;
             this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
-            // editButton
-            // 
-            this.editButton.AutoSize = true;
-            this.editButton.Font = new System.Drawing.Font("Victorian LET", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editButton.Location = new System.Drawing.Point(8, 1);
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(95, 39);
-            this.editButton.TabIndex = 47;
-            this.editButton.Text = "Edit";
-            this.editButton.UseVisualStyleBackColor = true;
-            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // mainForm
             // 

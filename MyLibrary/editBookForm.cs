@@ -8,7 +8,6 @@ namespace MyLibrary
     public partial class editBookForm : Form
     {
         private readonly mainForm Main;
-        private readonly Book SelectedBook;
 
         public string[] BookInfo {get; set;} = new string[10];
 
@@ -16,7 +15,6 @@ namespace MyLibrary
         {
             InitializeComponent();
             Main = main;
-            SelectedBook = selectedBook;
 
             // Set all comboboxes to be manually drawn
             ratingComboBox.DrawMode = DrawMode.OwnerDrawFixed;

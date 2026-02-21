@@ -99,6 +99,7 @@
             this.displayComboBox.Name = "displayComboBox";
             this.displayComboBox.Size = new System.Drawing.Size(384, 37);
             this.displayComboBox.TabIndex = 52;
+            this.displayComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // tbrComboBox
             // 
@@ -112,6 +113,7 @@
             this.tbrComboBox.Name = "tbrComboBox";
             this.tbrComboBox.Size = new System.Drawing.Size(384, 37);
             this.tbrComboBox.TabIndex = 53;
+            this.tbrComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // spicinessComboBox
             // 
@@ -128,6 +130,7 @@
             this.spicinessComboBox.Name = "spicinessComboBox";
             this.spicinessComboBox.Size = new System.Drawing.Size(384, 37);
             this.spicinessComboBox.TabIndex = 51;
+            this.spicinessComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // ratingComboBox
             // 
@@ -144,6 +147,7 @@
             this.ratingComboBox.Name = "ratingComboBox";
             this.ratingComboBox.Size = new System.Drawing.Size(384, 37);
             this.ratingComboBox.TabIndex = 50;
+            this.ratingComboBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.DrawComboBox);
             // 
             // titleTextBox
             // 

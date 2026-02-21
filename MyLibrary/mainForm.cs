@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
+using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
-
 namespace MyLibrary
 {
     public partial class mainForm : Form
@@ -16,8 +13,8 @@ namespace MyLibrary
         List<Book> currentResults = new List<Book>();
         List<string>[] bookInfoAutocompleteSource = {new List<string>(), new List<string>(), new List<string>(), 
                                                      new List<string>(), new List<string>(), new List<string>()};
-        SqlConnection connection;
-        SqlDataReader reader;
+        OleDbConnection connection;
+        OleDbDataReader reader;
         List<string> log = new List<string>(); // List of log entries to print into the debugForm
         List<string> stackTraceLog = new List<string>(); // List of detailed stack traces
         int logLine = 0; // Current log line number
@@ -44,7 +41,7 @@ namespace MyLibrary
             {
                 Log("Attempting to establish database connection...");
                 Log(@"Connection string: ""Provider=Microsoft.ACE.OLEDB.16.0;Data Source=|DataDirectory|\MyLibrary1.accdb;Persist Security Info=False;""""");
-                connection = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=library;Integrated Security=True");
+                connection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.16.0;Data Source=|DataDirectory|\\MyLibrary1.accdb;Persist Security Info=False;");
                 connection.Open();
                 Log("Connection successful");
 
@@ -107,10 +104,15 @@ namespace MyLibrary
         private void PopulateUIElements() {
             // Get all books from the database to count how many there are, as well as to populate the filter comboboxes
             try {
-                SqlCommand command = new SqlCommand("SELECT genre, sub_genre, rating, spiciness, location, s.series_name, CONCAT(CONCAT(a.first_name, ' '), a.last_name)" +
-                                                    "FROM books b" +
-                                                    " JOIN series s ON s.series_id = b.series_id" +
-                                                    " JOIN authors a ON a.author_id = b.author_id", connection);
+                OleDbCommand command = new OleDbCommand("SELECT b.genre, b.sub_genre, b.rating, b.spiciness, b.location, s.series_name, " +
+                                                        "LTrim(RTrim(" +
+                                                        "IIf(a.first_name Is Null, '', a.first_name) " +
+                                                        "& IIf(a.first_name Is Null Or a.last_name Is Null, '', ' ') " +
+                                                        "& IIf(a.last_name Is Null, '', a.last_name) " +
+                                                        ")) AS author_name " +
+                                                        "FROM ([dbo_books] AS b " +
+                                                        "INNER JOIN [dbo_series] AS s ON s.series_id = b.series_id) " +
+                                                        "INNER JOIN [dbo_authors] AS a ON a.author_id = b.author_id", connection);
                 Log($"Sending query to database: {command.CommandText}");
                 reader = command.ExecuteReader();
 
@@ -263,7 +265,7 @@ namespace MyLibrary
                     settings[0] = "b.title";
                 break;
                 case "Author":
-                    settings[0] = "CONCAT(a.first_name, a.last_name)"; // This option includes the 'a.' alias because the SQL statement uses a JOIN
+                    settings[0] = "(a.first_name & a.last_name)"; // This option includes the 'a.' alias because the SQL statement uses a JOIN
                 break;
                 case "Series":
                     settings[0] = "s.series_name";
@@ -320,24 +322,24 @@ namespace MyLibrary
 
             // Reformat searchType to fit directly into SQL query
             if (searchType == "Search By Title") {
-                searchType = "title";
+                searchType = "b.title";
             } else if (searchType == "Search By Author") {
-                searchType = "CONCAT(a.first_name, a.last_name)"; // Concatenate first and last name together to allow searching for either part of the name
+                searchType = "(IIf(a.first_name Is Null, '', a.first_name) & IIf(a.first_name Is Null Or a.last_name Is Null, '', ' ') & IIf(a.last_name Is Null, '', a.last_name))"; // Concatenate first and last name together to allow searching for either part of the name
             } else if (searchType == "Search By Series") {
                 searchType = "s.series_name";
             }
 
             // Decide whether we need the series JOIN statement
-            string joinStatement = "JOIN authors a ON a.author_id = b.author_id";
+            string joinStatement = "INNER JOIN dbo_authors a ON a.author_id = b.author_id)";
             if (searchType == "s.series_name" || sortSettings[0] == "s.series_name" || filterStates[1,0] != null) {
-                joinStatement += " JOIN series s ON s.series_id = b.series_id";
+                joinStatement += " INNER JOIN dbo_series s ON s.series_id = b.series_id";
             }
 
             // Attempt query assembly
             try {
                 // Build first piece with or without JOIN depending on if we're sorting or searching by author name
                 string queryStart = "SELECT b.* " +
-                                    $"FROM books b " +
+                                    $"FROM (dbo_books b " +
                                     $"{joinStatement} " +
                                     $"WHERE {searchType} LIKE '{formattedSearch}' ";
 
@@ -382,7 +384,7 @@ namespace MyLibrary
             if (queryString != null) {
                 // Load the SQL command and run it, collecting all results into a list
                 try {
-                    SqlCommand command = new SqlCommand(queryString, connection);
+                    OleDbCommand command = new OleDbCommand(queryString, connection);
                     Log($"Sending search query to database: {command.CommandText}");
                     reader = command.ExecuteReader();
                     // Read the query results into the book list
@@ -425,9 +427,9 @@ namespace MyLibrary
 
             try {
                 // Prepare the SQL command
-                SqlCommand command = new SqlCommand("SELECT * " +
-                                                    "FROM authors " +
-                                                   $"WHERE author_id IN ({authorIds})", connection);
+                OleDbCommand command = new OleDbCommand($"SELECT * " +
+                                                        $"FROM dbo_authors " +
+                                                        $"WHERE author_id IN ({authorIds})", connection);
                 Log($"Sending search query to database: {command.CommandText}");
 
                 // Query the database to find the authors and read the output into an array
@@ -457,9 +459,9 @@ namespace MyLibrary
 
             try {
                 // Prepare the SQL command
-                SqlCommand command = new SqlCommand("SELECT * " +
-                                                    "FROM authors " +
-                                                   $"WHERE author_id IN ({book.Author_Id})", connection);
+                OleDbCommand command = new OleDbCommand($"SELECT * " +
+                                                        $"FROM dbo_authors " +
+                                                        $"WHERE author_id IN ({book.Author_Id})", connection);
                 Log($"Sending search query to database: {command.CommandText}");
 
                 // Query the database to find the authors and read the output into an array
@@ -503,9 +505,9 @@ namespace MyLibrary
 
             try {
                 // Prepare the SQL command
-                SqlCommand command = new SqlCommand("SELECT * " +
-                                                    "FROM series " +
-                                                   $"WHERE series_id IN ({seriesIds})", connection);
+                OleDbCommand command = new OleDbCommand($"SELECT * " +
+                                                        $"FROM dbo_series " +
+                                                        $"WHERE series_id IN ({seriesIds})", connection);
                 Log($"Sending search query to database: {command.CommandText}");
 
                 // Query the database to find the authors and read the output into an array
@@ -534,9 +536,9 @@ namespace MyLibrary
 
             try {
                 // Prepare the SQL command
-                SqlCommand command = new SqlCommand("SELECT * " +
-                                                    "FROM series " +
-                                                   $"WHERE series_id = {book.Series_Id}", connection);
+                OleDbCommand command = new OleDbCommand($"SELECT * " +
+                                                        $"FROM dbo_series " +
+                                                        $"WHERE series_id = {book.Series_Id}", connection);
                 Log($"Sending search query to database: {command.CommandText}");
 
                 // Query the database to find the book's series
@@ -666,9 +668,9 @@ namespace MyLibrary
         private int GetAuthorId(string authorName) {  
             try {
                 int id = 0;
-                SqlCommand cmd = new SqlCommand($"SELECT author_id " +
-                                                $"FROM authors " +
-                                                $"WHERE CONCAT(CONCAT(first_name, ' '), last_name) LIKE '%{authorName}%'", connection);
+                OleDbCommand cmd = new OleDbCommand($"SELECT author_id " +
+                                                    $"FROM dbo_authors " +
+                                                    $"WHERE (first_name & ' ' & last_name) LIKE '%{authorName}%'", connection);
                 Log($"Sending search query to database: {cmd.CommandText}");
                 reader = cmd.ExecuteReader();
                 if (reader.Read()) {
@@ -698,9 +700,9 @@ namespace MyLibrary
         private int GetSeriesId(string seriesName) {
             try {
                 int id = 0;
-                SqlCommand cmd = new SqlCommand($"SELECT series_id " +
-                                                $"FROM series " +
-                                                $"WHERE series_name LIKE '%{seriesName}%'", connection);
+                OleDbCommand cmd = new OleDbCommand($"SELECT series_id " +
+                                                    $"FROM dbo_series " +
+                                                    $"WHERE series_name LIKE '%{seriesName}%'", connection);
                 Log($"Sending search query to database: {cmd.CommandText}");
                 reader = cmd.ExecuteReader();
                 if (reader.Read()) {
@@ -731,18 +733,18 @@ namespace MyLibrary
 
             string[] nameParts = name.Split(' ');
             try {
-                SqlCommand cmd = new SqlCommand($"INSERT INTO authors " +
-                                                $"VALUES ('{nameParts[0]}', '{nameParts[1]}')", connection);
+                OleDbCommand cmd = new OleDbCommand($"INSERT INTO dbo_authors (first_name, last_name)" +
+                                                    $"VALUES ('{nameParts[0]}', '{nameParts[1]}')", connection);
 
                 Log($"Sending insert query to database: {cmd.CommandText}");
                 int rows = cmd.ExecuteNonQuery();
                 Log($"Author insert successful. {rows} rows affected\"");
 
                 // Search for the inserted author, validating its existence
-                cmd = new SqlCommand($"SELECT author_id " +
-                                     $"FROM authors " +
-                                     $"WHERE first_name = '{nameParts[0]}' " +
-                                     $"AND last_name = '{nameParts[1]}'", connection);
+                cmd = new OleDbCommand($"SELECT author_id " +
+                                       $"FROM dbo_authors " +
+                                       $"WHERE first_name = '{nameParts[0]}' " +
+                                       $"AND last_name = '{nameParts[1]}'", connection);
                 
                 Log($"Sending search query to database: {cmd.CommandText}");
                 reader = cmd.ExecuteReader();
@@ -771,16 +773,16 @@ namespace MyLibrary
         private int InsertSeries(string name, int author_id) {
 
             try {
-                SqlCommand cmd = new SqlCommand($"INSERT INTO series " +
-                                                $"VALUES ('{name}', '{author_id}')", connection);
+                OleDbCommand cmd = new OleDbCommand($"INSERT INTO dbo_series (series_name, author_id)" +
+                                                    $"VALUES ('{name}', '{author_id}')", connection);
 
                 Log($"Sending insert query to database: {cmd.CommandText}");
                 int rows = cmd.ExecuteNonQuery();
                 Log($"Series insert successful. {rows} rows affected");
 
                 // Search for the inserted series, validating its existence
-                cmd = new SqlCommand($"SELECT series_id " +
-                                        $"FROM series " +
+                cmd = new OleDbCommand($"SELECT series_id " +
+                                        $"FROM dbo_series " +
                                         $"WHERE series_name = '{name}'", connection);
                 
                 Log($"Sending search query to database: {cmd.CommandText}");
@@ -822,13 +824,13 @@ namespace MyLibrary
                 if (GetAuthorId(bookInfo[1]) == -1) {
                     InsertAuthor(bookInfo[1]);
                 }
-                query = $"INSERT INTO books " +
+                query = $"INSERT INTO dbo_books (author_id, series_id, title, location, genre, sub_genre, spiciness, rating, is_display, to_be_read)" +
                         $"VALUES ({GetAuthorId(bookInfo[1])}, {GetSeriesId(bookInfo[2])}, '{bookInfo[0]}', '{bookInfo[5]}', " +
                         $"'{bookInfo[3]}', '{bookInfo[4]}', {bookInfo[7].Length}, {bookInfo[6].Length}, {bookInfo[8]}, {bookInfo[9]})";
 
             } else if (actionType == 2) {
                 Log("Building delete query...");
-                query = $"DELETE FROM books " +
+                query = $"DELETE FROM dbo_books " +
                         $"WHERE title = '{bookInfo[0]}'";
 
             } else if (actionType == 3) {
@@ -837,7 +839,7 @@ namespace MyLibrary
                 // Get the id of the book we're trying to edit
                 try {
                     string bookIdQuery = BuildQueryString(selectedBook.Title, "Search By Title");
-                    SqlCommand cmd = new SqlCommand(bookIdQuery, connection);
+                    OleDbCommand cmd = new OleDbCommand(bookIdQuery, connection);
                     Log($"Sending query to database: {cmd.CommandText}");
                     reader = cmd.ExecuteReader();
                     if (reader.Read()) {
@@ -856,11 +858,11 @@ namespace MyLibrary
                     if (GetAuthorId(bookInfo[1]) == -1) {
                         InsertAuthor(bookInfo[1]);
                     }
-                    query = $"UPDATE books " +
-                        $"SET title = '{bookInfo[0]}', author_id = {GetAuthorId(bookInfo[1])}, series_id = {GetSeriesId(bookInfo[2])}, genre = '{bookInfo[3]}', " +
-                        $"sub_genre = '{bookInfo[4]}', location = '{bookInfo[5]}', rating = {bookInfo[6].Length}, spiciness = {bookInfo[7].Length}, is_display = {bookInfo[8]}, " +
-                        $"to_be_read = {bookInfo[9]} " +
-                        $"WHERE book_id = {bookId}";
+                    query = $"UPDATE dbo_books " +
+                            $"SET title = '{bookInfo[0]}', author_id = {GetAuthorId(bookInfo[1])}, series_id = {GetSeriesId(bookInfo[2])}, genre = '{bookInfo[3]}', " +
+                            $"sub_genre = '{bookInfo[4]}', location = '{bookInfo[5]}', rating = {bookInfo[6].Length}, spiciness = {bookInfo[7].Length}, is_display = {bookInfo[8]}, " +
+                            $"to_be_read = {bookInfo[9]} " +
+                            $"WHERE book_id = {bookId}";
 
                 } catch (Exception ex) {
                     Log($"Book id search failed: {ex.Message}", ex.StackTrace);
@@ -881,13 +883,13 @@ namespace MyLibrary
 
                 string insertString = BuildQueryString(addForm.BookInfo, 1);
                 try {
-                    SqlCommand insertCommand = new SqlCommand(insertString, connection);
+                    OleDbCommand insertCommand = new OleDbCommand(insertString, connection);
                     Log($"Sending insert command to database: {insertCommand.CommandText}");
                     int rows = insertCommand.ExecuteNonQuery();
                     Log($"Book insert successful. {rows} rows affected");
                     // Search for the inserted book, validating its existance
-                    SqlCommand cmd = new SqlCommand($"SELECT title " +
-                                            $"FROM books " +
+                    OleDbCommand cmd = new OleDbCommand($"SELECT title " +
+                                            $"FROM dbo_books " +
                                             $"WHERE title = '{addForm.BookInfo[0]}'", connection);
                     reader = cmd.ExecuteReader();
                     if (reader.Read() && reader[0] != null) {
@@ -918,13 +920,13 @@ namespace MyLibrary
                 if (choice == DialogResult.Yes) {
                     string deleteString = BuildQueryString(new string[]{toRemove.Title}, 2);
                     try {
-                        SqlCommand deleteCommand = new SqlCommand(deleteString, connection);
+                        OleDbCommand deleteCommand = new OleDbCommand(deleteString, connection);
                         Log($"Sending delete command to database: {deleteCommand.CommandText}");
                         int rows = deleteCommand.ExecuteNonQuery();
                         Log($"Book delete successful. {rows} rows affected");
                         // Search for the inserted book, validating its existance
-                        SqlCommand cmd = new SqlCommand($"SELECT title " +
-                                                $"FROM books " +
+                        OleDbCommand cmd = new OleDbCommand($"SELECT title " +
+                                                $"FROM dbo_books " +
                                                 $"WHERE title = '{toRemove.Title}'", connection);
                         reader = cmd.ExecuteReader();
                         if (reader.Read() && reader[0] != null) {
@@ -955,7 +957,7 @@ namespace MyLibrary
 
                 string updateString = BuildQueryString(editForm.BookInfo, 3);
                 try {
-                    SqlCommand cmd = new SqlCommand (updateString, connection);
+                    OleDbCommand cmd = new OleDbCommand (updateString, connection);
                     Log($"Sending update command to database: {cmd.CommandText}");
                     int rows = cmd.ExecuteNonQuery();
                     if (rows == 1) {
