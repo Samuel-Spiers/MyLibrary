@@ -3,7 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\editbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|c:\\users\\samow\\onedrive\\desktop\\solo projects\\mylibrary\\mylibrary\\editbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\editbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,16 +19,8 @@
       "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\editbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|c:\\users\\samow\\onedrive\\desktop\\solo projects\\mylibrary\\mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\addbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\addbookform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|solutionrelative:mylibrary\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5511375B-C4DC-4E6B-AB0D-D7D0D8DED4E2}|MyLibrary\\MyLibrary.csproj|C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\mylibrary\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
@@ -46,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -63,7 +63,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "mainForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\mainForm.cs",
               "RelativeDocumentMoniker": "MyLibrary\\mainForm.cs",
@@ -75,13 +75,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "mainForm.cs",
               "DocumentMoniker": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\mainForm.cs",
               "RelativeDocumentMoniker": "MyLibrary\\mainForm.cs",
               "ToolTip": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\mainForm.cs",
               "RelativeToolTip": "MyLibrary\\mainForm.cs",
-              "ViewState": "AgIAAGMCAAAAAAAAAAAIwH8CAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH8CAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-15T18:40:38.933Z",
               "EditorCaption": ""
@@ -118,12 +118,11 @@
               "ToolTip": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\addBookForm.cs [Design]",
               "RelativeToolTip": "MyLibrary\\addBookForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T19:04:42.701Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-12-15T19:04:42.701Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "addBookForm.cs",
               "DocumentMoniker": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\addBookForm.cs",
               "RelativeDocumentMoniker": "MyLibrary\\addBookForm.cs",
@@ -131,12 +130,11 @@
               "RelativeToolTip": "MyLibrary\\addBookForm.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-17T17:24:37.402Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-17T17:24:37.402Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "editBookForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\editBookForm.cs",
               "RelativeDocumentMoniker": "MyLibrary\\editBookForm.cs",
@@ -148,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "editBookForm.cs",
               "DocumentMoniker": "C:\\Users\\samow\\OneDrive\\Desktop\\Solo Projects\\MyLibrary\\MyLibrary\\editBookForm.cs",
               "RelativeDocumentMoniker": "MyLibrary\\editBookForm.cs",
